@@ -1,7 +1,7 @@
 [build]
-  command = "bundle exec jekyll build"
+  command = "bundle install && bundle exec jekyll build"
   publish = "_site"
 
 [build.environment]
-  RUBY_VERSION = "3.1"
+  RUBY_VERSION = "2.7"
   JEKYLL_ENV = "production"
