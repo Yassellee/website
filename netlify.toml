@@ -3,6 +3,6 @@
   publish = "_site"
 
 [build.environment]
-  RUBY_VERSION = "2.7.6"
+  RUBY_VERSION = "3.1.4"
   JEKYLL_ENV = "production"
   BUNDLE_GEMFILE = "Gemfile"
