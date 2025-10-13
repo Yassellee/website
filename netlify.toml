@@ -1,6 +1,6 @@
 [build]
   command = "bundle install && bundle exec jekyll build"
-  publish = "_site"
+  publish = "_layouts"
 
 [build.environment]
   RUBY_VERSION = "3.1.0"
