@@ -21,6 +21,162 @@
   <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css" />
   <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
   <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+  
+  <style>
+    .paper-row {
+      transition: opacity 0.3s ease;
+    }
+    .paper-row.hidden {
+      display: none;
+    }
+    .toggle-btn {
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .toggle-btn.active {
+      background-color: #007bff;
+    }
+    .toggle-btn:hover {
+      background-color: #0056b3;
+    }
+    .highlight-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+      margin-top: 4px;
+    }
+    .media-toggle {
+      color: #007bff;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    .media-toggle:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+    .media-coverage {
+      margin-top: 15px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-left: 4px solid #007bff;
+      border-radius: 0 8px 8px 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      animation: slideDown 0.3s ease-out;
+    }
+    .media-coverage h4 {
+      margin: 0 0 10px 0;
+      color: #007bff;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .media-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .media-list li {
+      margin-bottom: 8px;
+      padding: 5px 0;
+      border-bottom: 1px solid #e9ecef;
+    }
+    .media-list li:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+    .media-list a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .media-list a:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .cite-toggle {
+      color: #007bff;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    .cite-toggle:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+    .citation-box {
+      margin-top: 15px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-left: 4px solid #28a745;
+      border-radius: 0 8px 8px 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      animation: slideDown 0.3s ease-out;
+    }
+    .citation-box h4 {
+      margin: 0 0 10px 0;
+      color: #28a745;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .bibtex-container {
+      position: relative;
+    }
+    .bibtex-code {
+      background-color: #2d3748;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      line-height: 1.4;
+      margin: 0 0 10px 0;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .copy-btn {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    .copy-btn:hover {
+      background-color: #218838;
+    }
+    .copy-btn:active {
+      background-color: #1e7e34;
+    }
+    .copy-btn.copied {
+      background-color: #6c757d;
+    }
+  </style>
 
 </head>
 
@@ -67,16 +223,20 @@
         <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
           <tr>
             <td style="padding:2.5%;width:100%;vertical-align:middle">
-              <h2>Research</h2>
+              <h2>Selected Papers</h2>
+              <div style="margin-bottom: 20px;">
+                <button id="selectedBtn" onclick="showPapers('selected')" class="toggle-btn active">Selected Papers</button>
+                <button id="allBtn" onclick="showPapers('all')" class="toggle-btn">All Papers</button>
+              </div>
             </td>
           </tr>
         </table>
         <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
 
-          {% for post in site.posts %}
-          {% for cat in post.categories %}
-          {% if cat == 'research' %}
-          <tr>
+          {% assign sorted_posts = site.posts | where: "categories", "research" | sort: "order" | sort: "date", "last" %}
+          {% for post in sorted_posts %}
+          {% assign visibility = post.visibility | default: 'selected' %}
+          <tr class="paper-row" data-visibility="{{visibility}}">
             <td style="padding:2.5%;width:25%;vertical-align:middle;min-width:120px">
               <img src="/tn{{post.image}}" alt="project image" style="width:auto; height:auto; max-width:100%;" />
             </td>
@@ -87,9 +247,13 @@
 
               <br>
               <em>{{post.venue}}</em>, {{ post.date | date: "%Y" }}
+              {% if post.highlight %}
               <br>
-              {% if post.arxiv %}
-              <a href="{{post.arxiv}}" target="_blank">arxiv</a> /
+              <span class="highlight-badge">{{post.highlight}}</span>
+              {% endif %}
+              <br>
+              {% if post.paper %}
+              <a href="{{post.paper}}" target="_blank">paper</a> /
               {% endif %}
               {% if post.video %}
               <a href="{{post.video}}" target="_blank">video</a> /
@@ -109,12 +273,35 @@
               {% if post.youtube %}
               <a href="{{post.youtube}}" target="_blank">youtube</a> /
               {% endif %}
+              {% if post.media %}
+              <a href="#" onclick="toggleMedia('media-{{forloop.index}}'); return false;" class="media-toggle">media coverage</a> /
+              {% endif %}
+              {% if post.cite %}
+              <a href="#" onclick="toggleCite('cite-{{forloop.index}}'); return false;" class="cite-toggle">cite</a> /
+              {% endif %}
               <p></p>
               {{ post.excerpt }}
+              {% if post.media %}
+              <div id="media-{{forloop.index}}" class="media-coverage" style="display: none;">
+                <h4>Media Coverage</h4>
+                <ul class="media-list">
+                  {% for media_item in post.media %}
+                  <li><a href="{{media_item.url}}" target="_blank">{{media_item.title}}</a> - {{media_item.outlet}}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %}
+              {% if post.cite %}
+              <div id="cite-{{forloop.index}}" class="citation-box" style="display: none;">
+                <h4>Citation</h4>
+                <div class="bibtex-container">
+                  <pre class="bibtex-code">{{post.cite}}</pre>
+                  <button onclick="copyBibtex('cite-{{forloop.index}}')" class="copy-btn">Copy BibTeX</button>
+                </div>
+              </div>
+              {% endif %}
             </td>
           </tr>
-          {% endif %}
-          {% endfor %}
           {% endfor %}
         </table>
 
@@ -131,6 +318,92 @@
       </td>
     </tr>
   </table>
+
+  <script>
+    function showPapers(type) {
+      const selectedBtn = document.getElementById('selectedBtn');
+      const allBtn = document.getElementById('allBtn');
+      const paperRows = document.querySelectorAll('.paper-row');
+      
+      // Update button states
+      if (type === 'selected') {
+        selectedBtn.classList.add('active');
+        allBtn.classList.remove('active');
+      } else {
+        allBtn.classList.add('active');
+        selectedBtn.classList.remove('active');
+      }
+      
+      // Show/hide papers based on visibility
+      paperRows.forEach(row => {
+        const visibility = row.getAttribute('data-visibility');
+        if (type === 'all' || visibility === 'both' || (type === 'selected' && visibility === 'selected')) {
+          row.classList.remove('hidden');
+        } else {
+          row.classList.add('hidden');
+        }
+      });
+    }
+    
+    // Initialize with selected papers shown
+    document.addEventListener('DOMContentLoaded', function() {
+      showPapers('selected');
+    });
+    
+    function toggleMedia(mediaId) {
+      const mediaDiv = document.getElementById(mediaId);
+      if (mediaDiv.style.display === 'none' || mediaDiv.style.display === '') {
+        mediaDiv.style.display = 'block';
+      } else {
+        mediaDiv.style.display = 'none';
+      }
+    }
+    
+    function toggleCite(citeId) {
+      const citeDiv = document.getElementById(citeId);
+      if (citeDiv.style.display === 'none' || citeDiv.style.display === '') {
+        citeDiv.style.display = 'block';
+      } else {
+        citeDiv.style.display = 'none';
+      }
+    }
+    
+    function copyBibtex(citeId) {
+      const citeDiv = document.getElementById(citeId);
+      const bibtexCode = citeDiv.querySelector('.bibtex-code').textContent;
+      const copyBtn = citeDiv.querySelector('.copy-btn');
+      
+      // Copy to clipboard
+      navigator.clipboard.writeText(bibtexCode).then(function() {
+        // Visual feedback
+        const originalText = copyBtn.textContent;
+        copyBtn.textContent = 'Copied!';
+        copyBtn.classList.add('copied');
+        
+        setTimeout(function() {
+          copyBtn.textContent = originalText;
+          copyBtn.classList.remove('copied');
+        }, 2000);
+      }).catch(function(err) {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = bibtexCode;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        const originalText = copyBtn.textContent;
+        copyBtn.textContent = 'Copied!';
+        copyBtn.classList.add('copied');
+        
+        setTimeout(function() {
+          copyBtn.textContent = originalText;
+          copyBtn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+  </script>
 </body>
 
 </html>
