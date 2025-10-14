@@ -154,40 +154,40 @@ span.highlight {
   .intro-table td:first-child h1 {
     margin: 0 0 12px 0;
     padding-right: 0;
-    margin-right: 150px;
+    margin-right: 135px;
   }
 
   .intro-table td:first-child > * + * {
-    clear: both;
     margin-top: 12px;
   }
 
   .intro-table td:nth-child(2) {
-    position: relative;
-    float: right;
-    width: 140px !important;
-    padding: 16px 16px 0 0 !important;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 110px !important;
+    padding: 0 !important;
   }
 
   .intro-table td:nth-child(2) img {
     display: block;
     width: 100%;
     height: auto;
-    max-width: 140px;
+    max-width: 110px;
   }
 
   @media (max-width: 480px) {
     .intro-table td:first-child h1 {
-      margin-right: 130px;
+      margin-right: 105px;
     }
 
     .intro-table td:nth-child(2) {
-      width: 120px !important;
-      padding-right: 12px !important;
+      width: 90px !important;
+      right: 12px;
     }
 
     .intro-table td:nth-child(2) img {
-      max-width: 120px;
+      max-width: 90px;
     }
   }
 
