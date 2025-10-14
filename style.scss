@@ -152,7 +152,7 @@ span.highlight {
   }
 
   .intro-table td:first-child h1 {
-    margin: 0 0 12px 0;
+    margin: 0 0 140px 0;
     padding-right: 0;
     margin-right: 135px;
   }
@@ -179,6 +179,7 @@ span.highlight {
   @media (max-width: 480px) {
     .intro-table td:first-child h1 {
       margin-right: 105px;
+      margin-bottom: 120px;
     }
 
     .intro-table td:nth-child(2) {
