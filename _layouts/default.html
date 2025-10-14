@@ -227,9 +227,9 @@
 
           {% comment %} Custom sorting: both papers first (by order), then all papers (by order) {% endcomment %}
           {% assign research_posts = site.posts | where: "categories", "research" %}
-          {% assign both_posts = research_posts | where: "visibility", "both" | sort: "order", "first" %}
-          {% assign all_posts = research_posts | where: "visibility", "all" | sort: "order", "first" %}
-          {% assign selected_posts = research_posts | where: "visibility", "selected" | sort: "order", "first" %}
+          {% assign both_posts = research_posts | where: "visibility", "both" | sort: "order", "last" | reverse %}
+          {% assign all_posts = research_posts | where: "visibility", "all" | sort: "order", "last" | reverse %}
+          {% assign selected_posts = research_posts | where: "visibility", "selected" | sort: "order", "last" | reverse %}
           {% assign sorted_posts = both_posts | concat: all_posts | concat: selected_posts %}
           {% for post in sorted_posts %}
           {% assign visibility = post.visibility | default: 'selected' %}
@@ -288,12 +288,12 @@
               {% if post.media %}
                 {% if links != '' %}{% assign links = links | append: ' / ' %}{% endif %}
                 {% assign media_id = 'media-' | append: forloop.index %}
-                {% assign links = links | append: '<a href="#" onclick="toggleMedia(' | append: media_id | append: '); return false;" class="media-toggle">media coverage</a>' %}
+                {% assign links = links | append: '<a href="#" class="media-toggle" data-target="' | append: media_id | append: '">media coverage</a>' %}
               {% endif %}
               {% if post.cite %}
                 {% if links != '' %}{% assign links = links | append: ' / ' %}{% endif %}
                 {% assign cite_id = 'cite-' | append: forloop.index %}
-                {% assign links = links | append: '<a href="#" onclick="toggleCite(' | append: cite_id | append: '); return false;" class="cite-toggle">cite</a>' %}
+                {% assign links = links | append: '<a href="#" class="cite-toggle" data-target="' | append: cite_id | append: '">cite</a>' %}
               {% endif %}
               {{ links }}
               <p></p>
@@ -398,7 +398,40 @@
     
     // Initialize with selected papers shown
     document.addEventListener('DOMContentLoaded', function() {
-      togglePapersView();
+      const sectionTitle = document.getElementById('sectionTitle');
+      const toggleLink = document.getElementById('toggleLink');
+      const paperRows = document.querySelectorAll('.paper-row');
+      
+      // Set initial state to selected papers
+      currentView = 'selected';
+      sectionTitle.textContent = 'Selected Papers';
+      toggleLink.textContent = 'see all';
+      
+      // Show only selected papers
+      paperRows.forEach(row => {
+        const visibility = row.getAttribute('data-visibility');
+        if (visibility === 'selected' || visibility === 'both') {
+          row.classList.remove('hidden');
+        } else {
+          row.classList.add('hidden');
+        }
+      });
+
+      document.querySelectorAll('.media-toggle').forEach(link => {
+        link.addEventListener('click', event => {
+          event.preventDefault();
+          const targetId = link.getAttribute('data-target');
+          toggleMedia(targetId);
+        });
+      });
+
+      document.querySelectorAll('.cite-toggle').forEach(link => {
+        link.addEventListener('click', event => {
+          event.preventDefault();
+          const targetId = link.getAttribute('data-target');
+          toggleCite(targetId);
+        });
+      });
     });
     
     function toggleMedia(mediaId) {
@@ -458,4 +491,3 @@
 </body>
 
 </html>
-
