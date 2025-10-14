@@ -287,11 +287,13 @@
               {% endif %}
               {% if post.media %}
                 {% if links != '' %}{% assign links = links | append: ' / ' %}{% endif %}
-                {% assign links = links | append: '<a href="#" onclick="toggleMedia(\'media-' | append: forloop.index | append: '\'); return false;" class="media-toggle">media coverage</a>' %}
+                {% assign media_id = 'media-' | append: forloop.index %}
+                {% assign links = links | append: '<a href="#" onclick="toggleMedia(' | append: media_id | append: '); return false;" class="media-toggle">media coverage</a>' %}
               {% endif %}
               {% if post.cite %}
                 {% if links != '' %}{% assign links = links | append: ' / ' %}{% endif %}
-                {% assign links = links | append: '<a href="#" onclick="toggleCite(\'cite-' | append: forloop.index | append: '\'); return false;" class="cite-toggle">cite</a>' %}
+                {% assign cite_id = 'cite-' | append: forloop.index %}
+                {% assign links = links | append: '<a href="#" onclick="toggleCite(' | append: cite_id | append: '); return false;" class="cite-toggle">cite</a>' %}
               {% endif %}
               {{ links }}
               <p></p>
