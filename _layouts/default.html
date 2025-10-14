@@ -30,16 +30,8 @@
       display: none;
     }
     .highlight-badge {
-      display: inline-block;
-      background: linear-gradient(135deg, #007bff, #0056b3);
-      color: white;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+      color: #f09228;
+      font-weight: normal;
       margin-top: 4px;
     }
     .media-toggle {
@@ -114,14 +106,14 @@
       margin-top: 15px;
       padding: 15px;
       background-color: #f8f9fa;
-      border-left: 4px solid #28a745;
+      border-left: 4px solid #007bff;
       border-radius: 0 8px 8px 0;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       animation: slideDown 0.3s ease-out;
     }
     .citation-box h4 {
       margin: 0 0 10px 0;
-      color: #28a745;
+      color: #007bff;
       font-size: 14px;
       font-weight: bold;
     }
@@ -142,7 +134,7 @@
       word-wrap: break-word;
     }
     .copy-btn {
-      background-color: #28a745;
+      background-color: #007bff;
       color: white;
       border: none;
       padding: 8px 16px;
@@ -153,10 +145,10 @@
       transition: background-color 0.3s ease;
     }
     .copy-btn:hover {
-      background-color: #218838;
+      background-color: #0056b3;
     }
     .copy-btn:active {
-      background-color: #1e7e34;
+      background-color: #004085;
     }
     .copy-btn.copied {
       background-color: #6c757d;
@@ -265,35 +257,64 @@
               <span class="highlight-badge">{{post.highlight}}</span>
               {% endif %}
               <br>
+              {% assign links = '' %}
               {% if post.paper %}
-              <a href="{{post.paper}}" target="_blank">paper</a> /
+                {% assign links = links | append: '<a href="' | append: post.paper | append: '" target="_blank">paper</a>' %}
               {% endif %}
               {% if post.video %}
-              <a href="{{post.video}}" target="_blank">video</a> /
+                {% if links != '' %}{% assign links = links | append: ' / ' %}{% endif %}
+                {% assign links = links | append: '<a href="' | append: post.video | append: '" target="_blank">video</a>' %}
               {% endif %}
               {% if post.code %}
-              <a href="{{post.code}}" target="_blank">code</a> /
+                {% if links != '' %}{% assign links = links | append: ' / ' %}{% endif %}
+                {% assign links = links | append: '<a href="' | append: post.code | append: '" target="_blank">code</a>' %}
               {% endif %}
               {% if post.poster %}
-              <a href="{{post.poster}}" target="_blank">poster</a> /
+                {% if links != '' %}{% assign links = links | append: ' / ' %}{% endif %}
+                {% assign links = links | append: '<a href="' | append: post.poster | append: '" target="_blank">poster</a>' %}
               {% endif %}
               {% if post.slides %}
-              <a href="{{post.slides}}" target="_blank">slides</a> /
+                {% if links != '' %}{% assign links = links | append: ' / ' %}{% endif %}
+                {% assign links = links | append: '<a href="' | append: post.slides | append: '" target="_blank">slides</a>' %}
               {% endif %}
               {% if post.website %}
-              <a href="{{post.website}}" target="_blank">website</a> /
+                {% if links != '' %}{% assign links = links | append: ' / ' %}{% endif %}
+                {% assign links = links | append: '<a href="' | append: post.website | append: '" target="_blank">website</a>' %}
               {% endif %}
               {% if post.youtube %}
-              <a href="{{post.youtube}}" target="_blank">youtube</a> /
+                {% if links != '' %}{% assign links = links | append: ' / ' %}{% endif %}
+                {% assign links = links | append: '<a href="' | append: post.youtube | append: '" target="_blank">youtube</a>' %}
               {% endif %}
               {% if post.media %}
-              <a href="#" onclick="toggleMedia('media-{{forloop.index}}'); return false;" class="media-toggle">media coverage</a> /
+                {% if links != '' %}{% assign links = links | append: ' / ' %}{% endif %}
+                {% assign links = links | append: '<a href="#" onclick="toggleMedia(\'media-' | append: forloop.index | append: '\'); return false;" class="media-toggle">media coverage</a>' %}
               {% endif %}
               {% if post.cite %}
-              <a href="#" onclick="toggleCite('cite-{{forloop.index}}'); return false;" class="cite-toggle">cite</a> /
+                {% if links != '' %}{% assign links = links | append: ' / ' %}{% endif %}
+                {% assign links = links | append: '<a href="#" onclick="toggleCite(\'cite-' | append: forloop.index | append: '\'); return false;" class="cite-toggle">cite</a>' %}
               {% endif %}
+              {{ links }}
               <p></p>
-              {{ post.excerpt }}
+              {% assign excerpt = post.excerpt %}
+              {% assign first_sentence = '' %}
+              {% assign rest_of_text = '' %}
+              {% assign sentence_end = false %}
+              {% assign chars = excerpt | split: '' %}
+              {% for char in chars %}
+                {% if sentence_end == false %}
+                  {% assign first_sentence = first_sentence | append: char %}
+                  {% if char == '.' or char == '?' or char == '!' %}
+                    {% assign sentence_end = true %}
+                  {% endif %}
+                {% else %}
+                  {% assign rest_of_text = rest_of_text | append: char %}
+                {% endif %}
+              {% endfor %}
+              {% if sentence_end %}
+                <strong>{{ first_sentence }}</strong>{{ rest_of_text }}
+              {% else %}
+                {{ post.excerpt }}
+              {% endif %}
               {% if post.media %}
               <div id="media-{{forloop.index}}" class="media-coverage" style="display: none;">
                 <h4>Media Coverage</h4>
@@ -405,7 +426,7 @@
       navigator.clipboard.writeText(bibtexCode).then(function() {
         // Visual feedback
         const originalText = copyBtn.textContent;
-        copyBtn.textContent = 'Copied!';
+        copyBtn.textContent = 'Copied';
         copyBtn.classList.add('copied');
         
         setTimeout(function() {
@@ -422,7 +443,7 @@
         document.body.removeChild(textArea);
         
         const originalText = copyBtn.textContent;
-        copyBtn.textContent = 'Copied!';
+        copyBtn.textContent = 'Copied';
         copyBtn.classList.add('copied');
         
         setTimeout(function() {
