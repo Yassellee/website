@@ -169,6 +169,58 @@
       vertical-align: super;
       color: #666;
     }
+    .paper-image {
+      cursor: zoom-in;
+      border-radius: 4px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .paper-image:hover {
+      transform: scale(1.03);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+    .image-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(0, 0, 0, 0.85);
+      padding: 20px;
+      z-index: 2000;
+    }
+    .image-modal.open {
+      display: flex;
+    }
+    .image-modal-content {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+    }
+    .image-modal-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      background: transparent;
+      border: 0;
+      color: #f8f9fa;
+      font-size: 28px;
+      cursor: pointer;
+    }
+    .image-modal-close:focus-visible {
+      outline: 2px solid #f8f9fa;
+      outline-offset: 4px;
+    }
+    .image-modal-caption {
+      margin-top: 10px;
+      color: #f8f9fa;
+      font-size: 16px;
+      text-align: center;
+      max-width: 90%;
+    }
   </style>
 
 </head>
@@ -235,7 +287,7 @@
           {% assign visibility = post.visibility | default: 'selected' %}
           <tr class="paper-row" data-visibility="{{visibility}}">
             <td style="padding:2.5%;width:25%;vertical-align:middle;min-width:120px">
-              <img src="{{post.image}}" alt="project image" style="width:auto; height:auto; max-width:100%;" />
+              <img src="{{post.image}}" alt="{{post.title}} thumbnail" data-caption="{{post.title}}" class="paper-image" style="width:auto; height:auto; max-width:100%;" />
             </td>
             <td style="padding:2.5%;width:75%;vertical-align:middle">
               <h3>{{post.title}}</h3>
@@ -244,8 +296,7 @@
               {% if post.authors contains '*' %}
                 {% assign has_asterisk = true %}
                 {% assign processed_authors = post.authors | replace: '*', '<sup>*</sup>' %}
-                {{processed_authors}}
-                <br><small>(*denotes equal contribution)</small>
+                {{processed_authors}} <small>(*denotes equal contribution)</small>
               {% else %}
                 {{post.authors}}
               {% endif %}
@@ -355,6 +406,12 @@
     </tr>
   </table>
 
+  <div id="imageModal" class="image-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged paper image" tabindex="-1">
+    <button type="button" class="image-modal-close" aria-label="Close image">&times;</button>
+    <img id="modalImage" class="image-modal-content" alt="">
+    <div id="imageCaption" class="image-modal-caption"></div>
+  </div>
+
   <script>
     let currentView = 'selected';
     
@@ -432,7 +489,80 @@
           toggleCite(targetId);
         });
       });
+
+      const modal = document.getElementById('imageModal');
+      const modalClose = document.querySelector('.image-modal-close');
+
+      document.querySelectorAll('.paper-image').forEach(image => {
+        image.setAttribute('tabindex', '0');
+        image.setAttribute('role', 'button');
+        image.addEventListener('click', () => {
+          const caption = image.getAttribute('data-caption') || image.alt;
+          openImageModal(image.src, caption);
+        });
+        image.addEventListener('keydown', event => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            const caption = image.getAttribute('data-caption') || image.alt;
+            openImageModal(image.src, caption);
+          }
+        });
+      });
+
+      if (modalClose) {
+        modalClose.addEventListener('click', event => {
+          event.preventDefault();
+          closeImageModal();
+        });
+      }
+
+      if (modal) {
+        modal.addEventListener('click', event => {
+          if (event.target === modal) {
+            closeImageModal();
+          }
+        });
+      }
+
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && modal && modal.classList.contains('open')) {
+          closeImageModal();
+        }
+      });
     });
+
+    function openImageModal(imageSrc, caption) {
+      const modal = document.getElementById('imageModal');
+      const modalImage = document.getElementById('modalImage');
+      const captionEl = document.getElementById('imageCaption');
+      if (!modal || !modalImage || !captionEl) {
+        return;
+      }
+
+      modalImage.src = imageSrc;
+      modalImage.alt = caption || 'Enlarged paper image';
+      captionEl.textContent = caption || '';
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      modal.focus();
+    }
+
+    function closeImageModal() {
+      const modal = document.getElementById('imageModal');
+      const modalImage = document.getElementById('modalImage');
+      const captionEl = document.getElementById('imageCaption');
+      if (!modal || !modalImage || !captionEl) {
+        return;
+      }
+
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      modalImage.src = '';
+      modalImage.alt = '';
+      captionEl.textContent = '';
+      document.body.style.overflow = '';
+    }
     
     function toggleMedia(mediaId) {
       const mediaDiv = document.getElementById(mediaId);

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "What Makes LLM Agent Simulations Useful for Policy? Insights From an Iterative Design Engagement in Emergency Preparedness"
-authors: "Yuxuan Li, Sauvik Das, Hirokazu Shirado"
+authors: "<strong>Yuxuan Li</strong>, Sauvik Das, Hirokazu Shirado"
 venue: "arXiv 2025"
 date: 2025-09-26
 categories: [research]
