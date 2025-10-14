@@ -227,9 +227,9 @@
 
           {% comment %} Custom sorting: both papers first (by order), then all papers (by order) {% endcomment %}
           {% assign research_posts = site.posts | where: "categories", "research" %}
-          {% assign both_posts = research_posts | where: "visibility", "both" | sort: "order", "last" %}
-          {% assign all_posts = research_posts | where: "visibility", "all" | sort: "order", "last" %}
-          {% assign selected_posts = research_posts | where: "visibility", "selected" | sort: "order", "last" %}
+          {% assign both_posts = research_posts | where: "visibility", "both" | sort: "order", "first" %}
+          {% assign all_posts = research_posts | where: "visibility", "all" | sort: "order", "first" %}
+          {% assign selected_posts = research_posts | where: "visibility", "selected" | sort: "order", "first" %}
           {% assign sorted_posts = both_posts | concat: all_posts | concat: selected_posts %}
           {% for post in sorted_posts %}
           {% assign visibility = post.visibility | default: 'selected' %}
@@ -313,7 +313,7 @@
                 {% endif %}
               {% endfor %}
               {% if sentence_end %}
-                <strong>{{ first_sentence }}</strong>{{ rest_of_text }}
+                {{ first_sentence }}{{ rest_of_text }}
               {% else %}
                 {{ post.excerpt }}
               {% endif %}
@@ -403,7 +403,7 @@
     
     function toggleMedia(mediaId) {
       const mediaDiv = document.getElementById(mediaId);
-      if (mediaDiv.style.display === 'none' || mediaDiv.style.display === '') {
+      if (mediaDiv.style.display === 'none') {
         mediaDiv.style.display = 'block';
       } else {
         mediaDiv.style.display = 'none';
@@ -412,7 +412,7 @@
     
     function toggleCite(citeId) {
       const citeDiv = document.getElementById(citeId);
-      if (citeDiv.style.display === 'none' || citeDiv.style.display === '') {
+      if (citeDiv.style.display === 'none') {
         citeDiv.style.display = 'block';
       } else {
         citeDiv.style.display = 'none';
