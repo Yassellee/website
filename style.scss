@@ -103,3 +103,95 @@ span.highlight {
 // ... Otherwise it really bloats up the top of the CSS file and makes it difficult to find the start
 //@import "highlights";
 //@import "svg-icons";
+
+@media (max-width: 768px) {
+  body,
+  td,
+  th,
+  tr,
+  p,
+  a {
+    font-size: 16px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .layout-table {
+    max-width: 100% !important;
+  }
+
+  .layout-table,
+  .layout-table table {
+    width: 100% !important;
+  }
+
+  .intro-table tr,
+  .intro-table td {
+    display: block;
+    width: 100% !important;
+  }
+
+  .intro-table td {
+    padding: 4% !important;
+  }
+
+  .intro-table td:nth-child(2) {
+    text-align: center;
+  }
+
+  .intro-table td:nth-child(2) img {
+    max-width: 220px;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .section-header-table td {
+    padding: 4% !important;
+    text-align: center;
+  }
+
+  .papers-table {
+    border-spacing: 0 !important;
+  }
+
+  .paper-row {
+    display: block;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+  }
+
+  .paper-row:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  .paper-row td {
+    display: block;
+    width: 100% !important;
+    padding: 6px 0 !important;
+  }
+
+  .paper-row td:first-child {
+    text-align: center;
+  }
+
+  .paper-row td:first-child img {
+    width: 100%;
+    height: auto;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .footer-table td {
+    padding: 4% !important;
+    text-align: center;
+  }
+}
