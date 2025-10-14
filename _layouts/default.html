@@ -29,21 +29,6 @@
     .paper-row.hidden {
       display: none;
     }
-    .toggle-btn {
-      background-color: #6c757d;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .toggle-btn.active {
-      background-color: #007bff;
-    }
-    .toggle-btn:hover {
-      background-color: #0056b3;
-    }
     .highlight-badge {
       display: inline-block;
       background: linear-gradient(135deg, #007bff, #0056b3);
@@ -176,6 +161,22 @@
     .copy-btn.copied {
       background-color: #6c757d;
     }
+    .toggle-link {
+      color: #007bff;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      font-size: 14px;
+    }
+    .toggle-link:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+    sup {
+      font-size: 0.8em;
+      vertical-align: super;
+      color: #666;
+    }
   </style>
 
 </head>
@@ -223,30 +224,42 @@
         <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
           <tr>
             <td style="padding:2.5%;width:100%;vertical-align:middle">
-              <h2>Selected Papers</h2>
+              <h2 id="sectionTitle">Selected Papers</h2>
               <div style="margin-bottom: 20px;">
-                <button id="selectedBtn" onclick="showPapers('selected')" class="toggle-btn active">Selected Papers</button>
-                <button id="allBtn" onclick="showPapers('all')" class="toggle-btn">All Papers</button>
+                <a href="#" onclick="togglePapersView(); return false;" id="toggleLink" class="toggle-link">see all</a>
               </div>
             </td>
           </tr>
         </table>
         <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
 
-          {% assign sorted_posts = site.posts | where: "categories", "research" | sort: "order" | sort: "date", "last" %}
+          {% comment %} Custom sorting: both papers first (by order), then all papers (by order) {% endcomment %}
+          {% assign research_posts = site.posts | where: "categories", "research" %}
+          {% assign both_posts = research_posts | where: "visibility", "both" | sort: "order", "last" %}
+          {% assign all_posts = research_posts | where: "visibility", "all" | sort: "order", "last" %}
+          {% assign selected_posts = research_posts | where: "visibility", "selected" | sort: "order", "last" %}
+          {% assign sorted_posts = both_posts | concat: all_posts | concat: selected_posts %}
           {% for post in sorted_posts %}
           {% assign visibility = post.visibility | default: 'selected' %}
           <tr class="paper-row" data-visibility="{{visibility}}">
             <td style="padding:2.5%;width:25%;vertical-align:middle;min-width:120px">
-              <img src="/tn{{post.image}}" alt="project image" style="width:auto; height:auto; max-width:100%;" />
+              <img src="{{post.image}}" alt="project image" style="width:auto; height:auto; max-width:100%;" />
             </td>
             <td style="padding:2.5%;width:75%;vertical-align:middle">
               <h3>{{post.title}}</h3>
               <br>
-              {{post.authors}}
+              {% assign has_asterisk = false %}
+              {% if post.authors contains '*' %}
+                {% assign has_asterisk = true %}
+                {% assign processed_authors = post.authors | replace: '*', '<sup>*</sup>' %}
+                {{processed_authors}}
+                <br><small>(*denotes equal contribution)</small>
+              {% else %}
+                {{post.authors}}
+              {% endif %}
 
               <br>
-              <em>{{post.venue}}</em>, {{ post.date | date: "%Y" }}
+              <em>{{post.venue}}</em>
               {% if post.highlight %}
               <br>
               <span class="highlight-badge">{{post.highlight}}</span>
@@ -320,34 +333,49 @@
   </table>
 
   <script>
-    function showPapers(type) {
-      const selectedBtn = document.getElementById('selectedBtn');
-      const allBtn = document.getElementById('allBtn');
+    let currentView = 'selected';
+    
+    function togglePapersView() {
+      const sectionTitle = document.getElementById('sectionTitle');
+      const toggleLink = document.getElementById('toggleLink');
       const paperRows = document.querySelectorAll('.paper-row');
       
-      // Update button states
-      if (type === 'selected') {
-        selectedBtn.classList.add('active');
-        allBtn.classList.remove('active');
+      if (currentView === 'selected') {
+        // Switch to all papers view
+        currentView = 'all';
+        sectionTitle.textContent = 'Papers';
+        toggleLink.textContent = 'see selected';
+        
+        // Show all papers
+        paperRows.forEach(row => {
+          const visibility = row.getAttribute('data-visibility');
+          if (visibility === 'both' || visibility === 'all' || visibility === 'selected') {
+            row.classList.remove('hidden');
+          } else {
+            row.classList.add('hidden');
+          }
+        });
       } else {
-        allBtn.classList.add('active');
-        selectedBtn.classList.remove('active');
+        // Switch to selected papers view
+        currentView = 'selected';
+        sectionTitle.textContent = 'Selected Papers';
+        toggleLink.textContent = 'see all';
+        
+        // Show only selected papers
+        paperRows.forEach(row => {
+          const visibility = row.getAttribute('data-visibility');
+          if (visibility === 'selected' || visibility === 'both') {
+            row.classList.remove('hidden');
+          } else {
+            row.classList.add('hidden');
+          }
+        });
       }
-      
-      // Show/hide papers based on visibility
-      paperRows.forEach(row => {
-        const visibility = row.getAttribute('data-visibility');
-        if (type === 'all' || visibility === 'both' || (type === 'selected' && visibility === 'selected')) {
-          row.classList.remove('hidden');
-        } else {
-          row.classList.add('hidden');
-        }
-      });
     }
     
     // Initialize with selected papers shown
     document.addEventListener('DOMContentLoaded', function() {
-      showPapers('selected');
+      togglePapersView();
     });
     
     function toggleMedia(mediaId) {
