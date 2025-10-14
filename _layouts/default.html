@@ -169,6 +169,10 @@
       vertical-align: super;
       color: #666;
     }
+    .paper-row h3 {
+      font-size: 1.2em;
+      margin-bottom: 0.6em;
+    }
     .paper-image {
       cursor: zoom-in;
       border-radius: 4px;
@@ -195,10 +199,11 @@
       display: flex;
     }
     .image-modal-content {
-      max-width: 90%;
-      max-height: 90%;
+      max-width: 70%;
+      max-height: 80%;
       border-radius: 10px;
       box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+      object-fit: contain;
     }
     .image-modal-close {
       position: absolute;
@@ -213,13 +218,6 @@
     .image-modal-close:focus-visible {
       outline: 2px solid #f8f9fa;
       outline-offset: 4px;
-    }
-    .image-modal-caption {
-      margin-top: 10px;
-      color: #f8f9fa;
-      font-size: 16px;
-      text-align: center;
-      max-width: 90%;
     }
   </style>
 
@@ -287,7 +285,7 @@
           {% assign visibility = post.visibility | default: 'selected' %}
           <tr class="paper-row" data-visibility="{{visibility}}">
             <td style="padding:2.5%;width:25%;vertical-align:middle;min-width:120px">
-              <img src="{{post.image}}" alt="{{post.title}} thumbnail" data-caption="{{post.title}}" class="paper-image" style="width:auto; height:auto; max-width:100%;" />
+              <img src="{{post.image}}" alt="{{post.title}} thumbnail" class="paper-image" style="width:auto; height:auto; max-width:100%;" />
             </td>
             <td style="padding:2.5%;width:75%;vertical-align:middle">
               <h3>{{post.title}}</h3>
@@ -409,7 +407,6 @@
   <div id="imageModal" class="image-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enlarged paper image" tabindex="-1">
     <button type="button" class="image-modal-close" aria-label="Close image">&times;</button>
     <img id="modalImage" class="image-modal-content" alt="">
-    <div id="imageCaption" class="image-modal-caption"></div>
   </div>
 
   <script>
@@ -496,15 +493,15 @@
       document.querySelectorAll('.paper-image').forEach(image => {
         image.setAttribute('tabindex', '0');
         image.setAttribute('role', 'button');
-        image.addEventListener('click', () => {
-          const caption = image.getAttribute('data-caption') || image.alt;
-          openImageModal(image.src, caption);
-        });
+        const openHandler = () => {
+          const altText = image.getAttribute('alt') || 'Enlarged paper image';
+          openImageModal(image.src, altText);
+        };
+        image.addEventListener('click', openHandler);
         image.addEventListener('keydown', event => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
-            const caption = image.getAttribute('data-caption') || image.alt;
-            openImageModal(image.src, caption);
+            openHandler();
           }
         });
       });
@@ -531,17 +528,15 @@
       });
     });
 
-    function openImageModal(imageSrc, caption) {
+    function openImageModal(imageSrc, altText) {
       const modal = document.getElementById('imageModal');
       const modalImage = document.getElementById('modalImage');
-      const captionEl = document.getElementById('imageCaption');
-      if (!modal || !modalImage || !captionEl) {
+      if (!modal || !modalImage) {
         return;
       }
 
       modalImage.src = imageSrc;
-      modalImage.alt = caption || 'Enlarged paper image';
-      captionEl.textContent = caption || '';
+      modalImage.alt = altText || 'Enlarged paper image';
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
@@ -551,8 +546,7 @@
     function closeImageModal() {
       const modal = document.getElementById('imageModal');
       const modalImage = document.getElementById('modalImage');
-      const captionEl = document.getElementById('imageCaption');
-      if (!modal || !modalImage || !captionEl) {
+      if (!modal || !modalImage) {
         return;
       }
 
@@ -560,7 +554,6 @@
       modal.setAttribute('aria-hidden', 'true');
       modalImage.src = '';
       modalImage.alt = '';
-      captionEl.textContent = '';
       document.body.style.overflow = '';
     }
     
