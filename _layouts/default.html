@@ -503,10 +503,11 @@
               document.body.removeChild(tempInput);
             }
 
-            emailLink.textContent = 'Copied!';
+            emailLink.textContent = 'Copied';
             setTimeout(() => {
               emailLink.textContent = defaultText;
             }, 2000);
+            window.location.href = `mailto:${emailAddress}`;
           } catch (error) {
             window.location.href = `mailto:${emailAddress}`;
           }
