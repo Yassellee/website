@@ -2,7 +2,7 @@
 layout: post
 title: "HiddenBench: Assessing Collective Reasoning in Multi-Agent LLMs via Hidden Profile Tasks"
 authors: "<span class=\"author-highlight\">Yuxuan Li</span>, Aoi Naito, Hirokazu Shirado"
-venue: "arXiv 2025, under review at ICLR 2026"
+venue: "Under review at ICLR 2026"
 date: 2025-09-25
 categories: [research]
 visibility: both
