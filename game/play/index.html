@@ -13,11 +13,6 @@ title: Public Goods Game
     </div>
   </header>
 
-  <div id="invalidModel" class="notice notice-warning" hidden>
-    <p>We couldn’t identify which model should play on your behalf. Please choose a model first.</p>
-    <a class="back-link" href="{{ site.baseurl }}/game/">Back to model selection</a>
-  </div>
-
   <div id="gameContent" hidden>
     <section class="scoreboard">
       <h2>Participant Totals</h2>
@@ -75,27 +70,6 @@ title: Public Goods Game
     border-radius: 999px;
     font-weight: 600;
     letter-spacing: 0.02em;
-  }
-
-  .notice {
-    border-radius: 12px;
-    padding: clamp(16px, 3vw, 22px);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .notice-warning {
-    background: #fff7ed;
-    border: 1px solid #fdba74;
-    color: #92400e;
-    text-align: center;
-  }
-
-  .back-link {
-    color: #1d4ed8;
-    font-weight: 600;
-    text-decoration: none;
   }
 
   .scoreboard h2 {
@@ -250,12 +224,13 @@ title: Public Goods Game
       return;
     }
 
+    const base = app.dataset.siteBase || '';
     const urlParams = new URLSearchParams(window.location.search);
     const modelChoice = urlParams.get('model');
     const validModels = ['gpt5', 'gpt4o'];
 
     if (!validModels.includes(modelChoice)) {
-      document.getElementById('invalidModel').hidden = false;
+      window.location.href = `${base}/game/`;
       return;
     }
 
@@ -418,7 +393,6 @@ title: Public Goods Game
     });
 
     restartBtn.addEventListener('click', () => {
-      const base = app.dataset.siteBase || '';
       window.location.href = `${base}/game/`;
     });
 
