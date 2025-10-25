@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-E00L9PT3V9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-E00L9PT3V9');
+  </script>
+  <title>{{ page.title | default: site.name }}</title>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="{{ site.name }}">
+
+  <link rel="stylesheet" href="{{ site.baseurl }}/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Lato', sans-serif;
+      background: #f5f7fb;
+      color: #1f2933;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .game-shell {
+      width: min(960px, 92vw);
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.16);
+      padding: clamp(20px, 4vw, 40px);
+      margin: 32px 0;
+    }
+
+    .game-shell h1,
+    .game-shell h2,
+    .game-shell p {
+      margin-top: 0;
+    }
+
+    .game-shell h1 {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      margin-bottom: 0.75em;
+      text-align: center;
+    }
+
+    .game-shell h2 {
+      font-size: clamp(1.1rem, 3.3vw, 1.6rem);
+      margin-bottom: 0.4em;
+    }
+
+    .game-shell p {
+      line-height: 1.6;
+      font-size: 1rem;
+      margin-bottom: 1em;
+      text-align: center;
+      color: #3d4654;
+    }
+
+    .game-shell main {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(16px, 3vw, 28px);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="game-shell">
+    <main>
+      {{ content }}
+    </main>
+  </div>
+</body>
+
+</html>

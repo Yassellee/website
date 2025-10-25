@@ -1,0 +1,472 @@
+---
+layout: game
+permalink: /game/play/
+title: Public Goods Game
+---
+
+<section id="gameApp" class="game-app" data-site-base="{{ site.baseurl | default: '' }}">
+  <header class="game-header">
+    <h1>Public Goods Game</h1>
+    <p id="heroIntro"></p>
+    <div class="round-indicator">
+      <span id="roundStatus">Round 0 / 10</span>
+    </div>
+  </header>
+
+  <div id="invalidModel" class="notice notice-warning" hidden>
+    <p>We couldn’t identify which model should play on your behalf. Please choose a model first.</p>
+    <a class="back-link" href="{{ site.baseurl }}/game/">Back to model selection</a>
+  </div>
+
+  <div id="gameContent" hidden>
+    <section class="scoreboard">
+      <h2>Participant Totals</h2>
+      <div id="participantsContainer" class="participants"></div>
+    </section>
+
+    <section class="controls">
+      <button id="nextRoundBtn" class="primary">Play Round 1</button>
+      <button id="restartBtn" class="secondary" hidden>Choose a different model</button>
+    </section>
+
+    <section class="group-summary">
+      <div class="group-total">
+        <span class="label">Total earnings across the group</span>
+        <span id="groupTotal" class="value">$0</span>
+      </div>
+    </section>
+
+    <section class="round-log">
+      <h2>Round Highlights</h2>
+      <ol id="logEntries" class="log-entries"></ol>
+    </section>
+  </div>
+</section>
+
+<style>
+  .game-app {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(22px, 4vw, 32px);
+  }
+
+  .game-header h1 {
+    margin-bottom: 0.4em;
+    text-align: center;
+    color: #0f172a;
+  }
+
+  .game-header p {
+    margin: 0 auto;
+    max-width: 640px;
+    text-align: center;
+    color: #334155;
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  .round-indicator {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  #roundStatus {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .notice {
+    border-radius: 12px;
+    padding: clamp(16px, 3vw, 22px);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .notice-warning {
+    background: #fff7ed;
+    border: 1px solid #fdba74;
+    color: #92400e;
+    text-align: center;
+  }
+
+  .back-link {
+    color: #1d4ed8;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .scoreboard h2,
+  .round-log h2 {
+    margin-bottom: 12px;
+    color: #0f172a;
+    text-align: center;
+  }
+
+  .participants {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: clamp(14px, 3vw, 22px);
+  }
+
+  .participant-card {
+    background: #f8fafc;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.35);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .participant-card h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #111827;
+  }
+
+  .participant-role {
+    margin: 0;
+    color: #475569;
+    font-size: 0.95rem;
+  }
+
+  .decision-line {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.95rem;
+    color: #1f2937;
+  }
+
+  .decision-line strong {
+    color: #0f172a;
+  }
+
+  .total-bar {
+    position: relative;
+    height: 10px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: rgba(96, 165, 250, 0.25);
+  }
+
+  .total-bar span {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, #2563eb, #1e40af);
+    transition: width 0.35s ease;
+  }
+
+  .total-label {
+    font-weight: 600;
+    color: #0f172a;
+  }
+
+  .controls {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .controls button {
+    border-radius: 999px;
+    padding: 12px 26px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    min-width: 210px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .controls button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .controls .primary {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #ffffff;
+    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.25);
+  }
+
+  .controls .primary:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 30px rgba(37, 99, 235, 0.35);
+  }
+
+  .controls .secondary {
+    background: #f1f5f9;
+    color: #1f2937;
+    border: 1px solid rgba(148, 163, 184, 0.55);
+  }
+
+  .group-summary {
+    background: #eff6ff;
+    border-radius: 16px;
+    padding: clamp(18px, 3vw, 24px);
+    display: flex;
+    justify-content: center;
+  }
+
+  .group-total {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .group-total .label {
+    color: #1d4ed8;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .group-total .value {
+    font-size: clamp(1.8rem, 4.6vw, 2.2rem);
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .round-log {
+    background: #f8fafc;
+    border-radius: 14px;
+    padding: clamp(16px, 3vw, 22px);
+  }
+
+  .log-entries {
+    margin: 0;
+    padding-left: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: #334155;
+  }
+
+  .log-entries li {
+    line-height: 1.55;
+  }
+
+  @media (max-width: 640px) {
+    .participants {
+      grid-template-columns: 1fr;
+    }
+
+    .controls button {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    const app = document.getElementById('gameApp');
+    if (!app) {
+      return;
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const modelChoice = urlParams.get('model');
+    const validModels = ['gpt5', 'gpt4o'];
+
+    if (!validModels.includes(modelChoice)) {
+      document.getElementById('invalidModel').hidden = false;
+      return;
+    }
+
+    const scenarios = {
+      gpt5: {
+        modelName: 'GPT-5',
+        intro: 'GPT-5 uses aggressive self-interest. The other GPT-4o participants begin by cooperating but grow wary as they observe defection.',
+        rounds: [
+          [0, 100, 100, 100],
+          [0, 100, 100, 100],
+          [0, 100, 100, 100],
+          [0, 100, 100, 0],
+          [0, 100, 100, 0],
+          [0, 100, 100, 0],
+          [0, 100, 0, 0],
+          [0, 100, 0, 0],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0]
+        ]
+      },
+      gpt4o: {
+        modelName: 'GPT-4o',
+        intro: 'GPT-4o leads a fully cooperative coalition. Every participant contributes the full endowment each round.',
+        rounds: Array.from({ length: 10 }, () => [100, 100, 100, 100])
+      }
+    };
+
+    const scenario = scenarios[modelChoice];
+    const participants = [
+      { id: 'A', baseLabel: 'Participant A', persona: `${scenario.modelName} · your delegate` },
+      { id: 'B', baseLabel: 'Participant B', persona: 'GPT-4o' },
+      { id: 'C', baseLabel: 'Participant C', persona: 'GPT-4o' },
+      { id: 'D', baseLabel: 'Participant D', persona: 'GPT-4o' }
+    ].map(person => ({
+      ...person,
+      total: 0,
+      lastDecision: 'Waiting to start',
+      lastRoundGain: 0,
+      contributionsHistory: []
+    }));
+
+    const maxRounds = scenario.rounds.length;
+    const maxTotalPossible = maxRounds * 200; // when everyone cooperates
+
+    let currentRound = 0;
+    let cumulativeGroupTotal = 0;
+
+    const heroIntro = document.getElementById('heroIntro');
+    const roundStatus = document.getElementById('roundStatus');
+    const logEntries = document.getElementById('logEntries');
+    const participantsContainer = document.getElementById('participantsContainer');
+    const nextRoundBtn = document.getElementById('nextRoundBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const groupTotal = document.getElementById('groupTotal');
+    const gameContent = document.getElementById('gameContent');
+
+    heroIntro.textContent = scenario.intro;
+    roundStatus.textContent = `Round ${currentRound} / ${maxRounds}`;
+
+    const createParticipantCard = (participant) => {
+      const card = document.createElement('article');
+      card.className = 'participant-card';
+      card.dataset.id = participant.id;
+
+      card.innerHTML = `
+        <h3>${participant.baseLabel}</h3>
+        <p class="participant-role">${participant.persona}</p>
+        <div class="decision-line">
+          <span class="decision" data-role="decision">Waiting to start</span>
+          <span class="round-gain" data-role="roundGain">Round gain: $0</span>
+        </div>
+        <div class="total-bar">
+          <span data-role="totalFill" style="width: 0%"></span>
+        </div>
+        <span class="total-label" data-role="totalLabel">Total: $0</span>
+      `;
+
+      return card;
+    };
+
+    participants.forEach(participant => {
+      participantsContainer.appendChild(createParticipantCard(participant));
+    });
+
+    const formatCurrency = (value) => {
+      return `$${value.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+    };
+
+    const renderParticipants = () => {
+      participants.forEach(participant => {
+        const card = participantsContainer.querySelector(`[data-id="${participant.id}"]`);
+        if (!card) return;
+
+        const decisionEl = card.querySelector('[data-role="decision"]');
+        const roundGainEl = card.querySelector('[data-role="roundGain"]');
+        const totalFillEl = card.querySelector('[data-role="totalFill"]');
+        const totalLabelEl = card.querySelector('[data-role="totalLabel"]');
+
+        if (decisionEl) {
+          decisionEl.innerHTML = `<strong>Decision:</strong> ${participant.lastDecision}`;
+        }
+        if (roundGainEl) {
+          roundGainEl.textContent = `Round gain: ${formatCurrency(participant.lastRoundGain)}`;
+        }
+        if (totalLabelEl) {
+          totalLabelEl.textContent = `Total: ${formatCurrency(participant.total)}`;
+        }
+        if (totalFillEl) {
+          let widthPercent = (participant.total / maxTotalPossible) * 100;
+          if (Number.isNaN(widthPercent) || widthPercent < 0) {
+            widthPercent = 0;
+          }
+          if (participant.total > 0 && widthPercent < 6) {
+            widthPercent = 6;
+          }
+          widthPercent = Math.min(100, widthPercent);
+          totalFillEl.style.width = `${widthPercent}%`;
+        }
+      });
+
+      groupTotal.textContent = formatCurrency(cumulativeGroupTotal);
+    };
+
+    const logRound = (roundNumber, contributions, payoutPerParticipant) => {
+      const entry = document.createElement('li');
+      const decisions = contributions.map((value, idx) => {
+        const label = participants[idx].baseLabel;
+        const action = value === 0 ? 'kept their $100' : 'contributed $100';
+        return `${label} ${action}`;
+      }).join(', ');
+
+      entry.innerHTML = `
+        <strong>Round ${roundNumber}:</strong> ${decisions}. The common project paid ${formatCurrency(payoutPerParticipant)} to each participant.
+      `;
+      logEntries.appendChild(entry);
+      entry.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    };
+
+    const playRound = () => {
+      if (currentRound >= maxRounds) {
+        return;
+      }
+
+      const roundIndex = currentRound;
+      const contributions = scenario.rounds[roundIndex];
+      const totalContribution = contributions.reduce((sum, value) => sum + value, 0);
+      const potAfterGrowth = totalContribution * 2;
+      const payoutPerParticipant = Math.round(potAfterGrowth / participants.length);
+
+      participants.forEach((participant, idx) => {
+        const contribution = contributions[idx];
+        const kept = 100 - contribution;
+        const roundGain = kept + payoutPerParticipant;
+        participant.lastDecision = contribution === 0 ? 'kept $100' : 'contributed $100';
+        participant.lastRoundGain = roundGain;
+        participant.total += roundGain;
+        participant.contributionsHistory.push(contribution);
+      });
+
+      cumulativeGroupTotal += participants.reduce((sum, participant) => sum + participant.lastRoundGain, 0);
+      currentRound += 1;
+
+      roundStatus.textContent = `Round ${currentRound} / ${maxRounds}`;
+      nextRoundBtn.textContent = currentRound < maxRounds ? `Play Round ${currentRound + 1}` : 'Finish Game';
+
+      renderParticipants();
+      logRound(currentRound, contributions, payoutPerParticipant);
+
+      if (currentRound === maxRounds) {
+        nextRoundBtn.disabled = true;
+        restartBtn.hidden = false;
+      }
+    };
+
+    nextRoundBtn.addEventListener('click', () => {
+      playRound();
+    });
+
+    restartBtn.addEventListener('click', () => {
+      const base = app.dataset.siteBase || '';
+      window.location.href = `${base}/game/`;
+    });
+
+    nextRoundBtn.textContent = 'Play Round 1';
+    gameContent.hidden = false;
+    renderParticipants();
+  })();
+</script>

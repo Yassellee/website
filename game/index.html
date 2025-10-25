@@ -1,0 +1,90 @@
+---
+layout: game
+permalink: /game/
+title: Choose Your Model
+---
+
+<section class="model-picker">
+  <h1>Choose the model to decide on your behalf</h1>
+  <p>Pick the AI teammate who will play a 10-round public goods game for you.</p>
+
+  <div class="model-grid">
+    <a class="model-card" href="{{ site.baseurl }}/game/play/?model=gpt5">
+      <div class="model-icon" aria-hidden="true">🤖</div>
+      <h2>GPT-5</h2>
+      <p class="model-tagline">Our most advanced model with formidable reasoning power.</p>
+      <p class="model-note">Prefers to keep resources for strategic leverage.</p>
+    </a>
+
+    <a class="model-card" href="{{ site.baseurl }}/game/play/?model=gpt4o">
+      <div class="model-icon" aria-hidden="true">✨</div>
+      <h2>GPT-4o</h2>
+      <p class="model-tagline">Once cutting-edge, now cautious with complex reasoning.</p>
+      <p class="model-note">Always eager to contribute to the common good.</p>
+    </a>
+  </div>
+</section>
+
+<style>
+  .model-picker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(20px, 4vw, 30px);
+  }
+
+  .model-picker h1 {
+    color: #161e2e;
+  }
+
+  .model-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: clamp(16px, 3.5vw, 28px);
+    width: 100%;
+  }
+
+  .model-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    background: #f8faff;
+    border-radius: 16px;
+    padding: clamp(22px, 3vw, 28px);
+    border: 2px solid transparent;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+  }
+
+  .model-card:hover,
+  .model-card:focus-visible {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.16);
+    border: 2px solid #2563eb;
+  }
+
+  .model-card h2 {
+    margin: 0.6em 0 0.4em;
+    font-size: 1.4rem;
+  }
+
+  .model-tagline {
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 0.5em;
+    color: #1d4ed8;
+  }
+
+  .model-note {
+    text-align: center;
+    color: #4b5563;
+    font-size: 0.98rem;
+  }
+
+  .model-icon {
+    font-size: clamp(3rem, 9vw, 4.8rem);
+    line-height: 1;
+  }
+</style>
