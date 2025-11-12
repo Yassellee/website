@@ -342,7 +342,7 @@
               {% if post.media %}
                 {% if links != '' %}{% assign links = links | append: ' / ' %}{% endif %}
                 {% assign media_id = 'media-' | append: forloop.index %}
-                {% assign links = links | append: '<a href="#" class="media-toggle" data-target="' | append: media_id | append: '">media coverage</a>' %}
+                {% assign links = links | append: '<a href="#" class="media-toggle" data-target="' | append: media_id | append: '">selected media coverage</a>' %}
               {% endif %}
               {% if post.cite %}
                 {% if links != '' %}{% assign links = links | append: ' / ' %}{% endif %}
@@ -373,7 +373,7 @@
               {% endif %}
               {% if post.media %}
               <div id="media-{{forloop.index}}" class="media-coverage" style="display: none;">
-                <h4>Media Coverage</h4>
+                <h4>Selected Media Coverage</h4>
                 <ul class="media-list">
                   {% for media_item in post.media %}
                   <li><a href="{{media_item.url}}" target="_blank">{{media_item.title}}</a> - {{media_item.outlet}}</li>
