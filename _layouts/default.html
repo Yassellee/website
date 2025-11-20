@@ -376,8 +376,22 @@
                 <h4>Selected Media Coverage</h4>
                 <ul class="media-list">
                   {% for media_item in post.media %}
-                  <li><a href="{{media_item.url}}" target="_blank">{{media_item.title}}</a> - {{media_item.outlet}}</li>
+                    {% if media_item.title %}
+                      <li><a href="{{media_item.url}}" target="_blank">{{media_item.title}}</a> - {{media_item.outlet}}</li>
+                    {% endif %}
                   {% endfor %}
+                  {% assign untitled_media = '' %}
+                  {% for media_item in post.media %}
+                    {% unless media_item.title %}
+                      {% if untitled_media != '' %}
+                        {% assign untitled_media = untitled_media | append: ' / ' %}
+                      {% endif %}
+                      {% assign untitled_media = untitled_media | append: '<a href="' | append: media_item.url | append: '" target="_blank">' | append: media_item.outlet | append: '</a>' %}
+                    {% endunless %}
+                  {% endfor %}
+                  {% if untitled_media != '' %}
+                    <li>{{untitled_media}}</li>
+                  {% endif %}
                 </ul>
               </div>
               {% endif %}
