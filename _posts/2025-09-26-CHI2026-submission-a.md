@@ -2,7 +2,7 @@
 layout: post
 title: "What Makes LLM Agent Simulations Useful for Policy? Insights From an Iterative Design Engagement in Emergency Preparedness"
 authors: "<span class=\"author-highlight\">Yuxuan Li</span>, Sauvik Das, Hirokazu Shirado"
-venue: "Under review at CHI 2026"
+venue: "Under review at ToCHI"
 date: 2025-09-26
 categories: [research]
 visibility: both
