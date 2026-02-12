@@ -158,17 +158,33 @@ function migrateState(state) {
 async function loadState() {
   const store = getStore("ethno-reddit");
   const existing = await store.get(STATE_KEY, { type: "json" });
-  const metadata = await store.getMetadata(STATE_KEY);
 
   if (existing) {
-    return { state: migrateState(existing), etag: metadata ? metadata.etag : null };
+    let etag = null;
+    try {
+      const metadata = await store.getMetadata(STATE_KEY);
+      etag = metadata && metadata.etag ? metadata.etag : null;
+    } catch {
+      etag = null;
+    }
+    return { state: migrateState(existing), etag };
   }
 
   const seeded = seedState();
-  await store.setJSON(STATE_KEY, seeded, { onlyIfNew: true });
+  try {
+    await store.setJSON(STATE_KEY, seeded, { onlyIfNew: true });
+  } catch {
+    // Another request may have created initial state concurrently.
+  }
   const state = (await store.get(STATE_KEY, { type: "json" })) || seeded;
-  const md = await store.getMetadata(STATE_KEY);
-  return { state: migrateState(state), etag: md ? md.etag : null };
+  let etag = null;
+  try {
+    const md = await store.getMetadata(STATE_KEY);
+    etag = md && md.etag ? md.etag : null;
+  } catch {
+    etag = null;
+  }
+  return { state: migrateState(state), etag };
 }
 
 async function saveState(state, etag) {
