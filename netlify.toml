@@ -2,7 +2,15 @@
   command = "bundle install && bundle exec jekyll build"
   publish = "_site"
 
+[functions]
+  directory = "netlify/functions"
+
 [build.environment]
   RUBY_VERSION = "3.1.4"
   JEKYLL_ENV = "production"
   BUNDLE_GEMFILE = "Gemfile"
+
+[[redirects]]
+  from = "/ethno-reddit/api/*"
+  to = "/.netlify/functions/ethno-reddit-api/:splat"
+  status = 200

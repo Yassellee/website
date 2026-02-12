@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ethno Reddit Experiment</title>
+    <link rel="stylesheet" href="/ethno-reddit/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Ethno Reddit</h1>
+      <div id="session-box" class="session-box"></div>
+    </header>
+
+    <main class="layout">
+      <section id="auth-panel" class="card auth-card">
+        <h2>Login</h2>
+        <p class="muted">Accounts: Hiro, Yuxuan, Faria, Aoi, Leehee</p>
+        <form id="login-form">
+          <label>
+            Username
+            <input id="username" required />
+          </label>
+          <label>
+            Password
+            <input id="password" type="password" required />
+          </label>
+          <button type="submit">Sign in</button>
+        </form>
+        <p id="login-error" class="error"></p>
+      </section>
+
+      <section id="app" class="hidden app-grid">
+        <aside class="card">
+          <h2>Subreddits</h2>
+          <form id="subreddit-form" class="stack">
+            <input id="subreddit-name" placeholder="Name (e.g., field-notes)" maxlength="40" required />
+            <textarea id="subreddit-description" placeholder="Description" rows="2" maxlength="200"></textarea>
+            <button type="submit">Create subreddit</button>
+          </form>
+          <ul id="subreddit-list" class="list"></ul>
+        </aside>
+
+        <section class="card">
+          <div class="row-between">
+            <h2 id="current-subreddit-label">Posts</h2>
+            <button id="delete-subreddit-btn" class="danger hidden">Delete subreddit</button>
+          </div>
+          <form id="post-form" class="stack hidden">
+            <input id="post-title" placeholder="Post title" maxlength="120" required />
+            <textarea id="post-body" placeholder="Write your post" rows="4" maxlength="3000" required></textarea>
+            <button type="submit">Create post</button>
+          </form>
+          <div id="post-list" class="stack"></div>
+        </section>
+
+        <aside class="card">
+          <h2>AI Ethnographer</h2>
+          <p class="muted">Shared ethnography notebook per subreddit.</p>
+          <div id="ethnography-view" class="stack"></div>
+        </aside>
+
+        <aside class="card full-row">
+          <div class="row-between">
+            <h2>Interview Inbox</h2>
+            <button id="manual-ai-btn" title="Run ethnographer now">Run AI now</button>
+          </div>
+          <div id="inbox" class="stack"></div>
+        </aside>
+      </section>
+    </main>
+
+    <template id="post-template">
+      <article class="post-card">
+        <div class="row-between">
+          <h3 class="post-title"></h3>
+          <button class="danger delete-post">Delete post</button>
+        </div>
+        <p class="meta"></p>
+        <p class="post-body"></p>
+        <div class="reply-box stack">
+          <h4>Replies</h4>
+          <div class="replies stack"></div>
+          <form class="reply-form stack">
+            <textarea rows="2" maxlength="1000" placeholder="Reply to this post" required></textarea>
+            <button type="submit">Reply</button>
+          </form>
+        </div>
+      </article>
+    </template>
+
+    <script src="/ethno-reddit/main.js" defer></script>
+  </body>
+</html>
