@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-const { getStore } = require("@netlify/blobs");
+const { connectLambda, getStore } = require("@netlify/blobs");
 
 const STATE_KEY = "state";
 const TOKEN_TTL_SECONDS = 60 * 60 * 24 * 7;
@@ -553,6 +553,14 @@ async function handleLogin(event) {
 
 exports.handler = async (event) => {
   try {
+    try {
+      if (event && event.blobs) {
+        connectLambda(event);
+      }
+    } catch {
+      // If context wiring fails, getStore() may still work when NETLIFY_BLOBS_CONTEXT is already present.
+    }
+
     if (event.httpMethod === "OPTIONS") {
       return {
         statusCode: 204,
