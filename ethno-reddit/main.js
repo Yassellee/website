@@ -95,6 +95,12 @@ async function refreshData() {
   render();
 }
 
+function triggerEthnographerAsync() {
+  api("ethnographer-tick", { method: "POST", body: JSON.stringify({ source: "heartbeat" }) })
+    .then(() => refreshData())
+    .catch(() => {});
+}
+
 async function maybeAuthRestore() {
   if (!state.token) {
     render();
@@ -170,6 +176,7 @@ function renderPosts() {
         body: JSON.stringify({ postId: post.id }),
       });
       await refreshData();
+      triggerEthnographerAsync();
     };
 
     const repliesContainer = node.querySelector(".replies");
@@ -185,6 +192,7 @@ function renderPosts() {
           body: JSON.stringify({ replyId: reply.id }),
         });
         await refreshData();
+        triggerEthnographerAsync();
       };
       repliesContainer.appendChild(item);
     });
@@ -201,6 +209,7 @@ function renderPosts() {
       });
       textarea.value = "";
       await refreshData();
+      triggerEthnographerAsync();
     };
 
     el.postList.appendChild(node);
@@ -294,6 +303,7 @@ function renderInbox() {
           body: JSON.stringify({ threadId: thread.id, body: text }),
         });
         await refreshData();
+        triggerEthnographerAsync();
       };
       wrapper.appendChild(form);
     }
@@ -349,6 +359,7 @@ el.subredditForm.onsubmit = async (e) => {
   el.subredditName.value = "";
   el.subredditDescription.value = "";
   await refreshData();
+  triggerEthnographerAsync();
 };
 
 el.deleteSubredditBtn.onclick = async () => {
@@ -360,6 +371,7 @@ el.deleteSubredditBtn.onclick = async () => {
     body: JSON.stringify({ subredditId: sub.id }),
   });
   await refreshData();
+  triggerEthnographerAsync();
 };
 
 el.postForm.onsubmit = async (e) => {
@@ -377,6 +389,7 @@ el.postForm.onsubmit = async (e) => {
   el.postTitle.value = "";
   el.postBody.value = "";
   await refreshData();
+  triggerEthnographerAsync();
 };
 
 el.manualAiBtn.onclick = async () => {

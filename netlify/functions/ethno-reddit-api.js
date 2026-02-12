@@ -509,7 +509,7 @@ async function runEthnographer(state, reason) {
   for (const evt of newEvents) {
     if (evt.subredditId) targetSubredditIds.add(evt.subredditId);
   }
-  if (reason === "manual" || reason === "heartbeat") {
+  if (reason === "manual") {
     for (const sub of state.subreddits) targetSubredditIds.add(sub.id);
   }
 
@@ -613,7 +613,6 @@ exports.handler = async (event) => {
           payload: { name: subreddit.name },
         });
         addPassiveObservationFromEvent(draft, evt);
-        await runEthnographer(draft, "mutation");
       });
 
       return json(200, publicState(state, username));
@@ -672,7 +671,6 @@ exports.handler = async (event) => {
         });
         addPassiveObservationFromEvent(draft, evt);
 
-        await runEthnographer(draft, "mutation");
       });
 
       return json(200, publicState(state, username));
@@ -697,7 +695,6 @@ exports.handler = async (event) => {
           postId,
           payload: { title: post.title },
         });
-        await runEthnographer(draft, "mutation");
       });
 
       return json(200, publicState(state, username));
@@ -731,7 +728,6 @@ exports.handler = async (event) => {
         });
         addPassiveObservationFromEvent(draft, evt);
 
-        await runEthnographer(draft, "mutation");
       });
 
       return json(200, publicState(state, username));
@@ -758,7 +754,6 @@ exports.handler = async (event) => {
             payload: {},
           });
         }
-        await runEthnographer(draft, "mutation");
       });
 
       return json(200, publicState(state, username));
@@ -786,7 +781,6 @@ exports.handler = async (event) => {
         });
         addPassiveObservationFromEvent(draft, evt);
 
-        await runEthnographer(draft, "mutation");
       });
 
       return json(200, publicState(state, username));

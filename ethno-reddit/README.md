@@ -15,6 +15,7 @@ This folder is a fully isolated Reddit-like experiment deployed under `/ethno-re
 - Reply/delete replies
 - Persistent shared data across sessions/browsers using Netlify Blobs
 - AI ethnographer (`gpt-5-nano`) that:
+  - runs asynchronously (non-blocking) from core CRUD requests
   - updates a visible shared ethnography notebook per subreddit
   - proactively opens interview threads with users
   - asks follow-up questions and closes interviews when enough context is gathered
