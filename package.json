@@ -1,7 +1,8 @@
 {
-  "name": "ethno-reddit-functions",
+  "name": "website",
   "private": true,
   "version": "1.0.0",
+  "description": "Top-level JS dependencies for Netlify Functions",
   "dependencies": {
     "@netlify/blobs": "^10.6.0"
   }

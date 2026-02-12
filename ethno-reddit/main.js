@@ -222,6 +222,15 @@ function renderEthnography() {
 
   const patterns = (entry.patterns || []).map((p) => `<li>${escapeHtml(p)}</li>`).join("");
   const questions = (entry.openQuestions || []).map((q) => `<li>${escapeHtml(q)}</li>`).join("");
+  const observations = (entry.observations || [])
+    .slice()
+    .sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""))
+    .slice(0, 12)
+    .map(
+      (o) =>
+        `<li><span class="muted">[${escapeHtml(o.kind || "note")}] ${new Date(o.createdAt).toLocaleString()}</span><div>${escapeHtml(o.body || "")}</div></li>`
+    )
+    .join("");
   el.ethnographyView.innerHTML = `
     <p><strong>Last update:</strong> ${new Date(entry.updatedAt).toLocaleString()}</p>
     <p>${escapeHtml(entry.summary || "No summary.")}</p>
@@ -232,6 +241,10 @@ function renderEthnography() {
     <div>
       <strong>Open questions</strong>
       <ul>${questions || "<li>None right now.</li>"}</ul>
+    </div>
+    <div>
+      <strong>Observation Log</strong>
+      <ul>${observations || "<li>No observations yet.</li>"}</ul>
     </div>
   `;
 }

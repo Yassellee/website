@@ -18,11 +18,13 @@ This folder is a fully isolated Reddit-like experiment deployed under `/ethno-re
   - updates a visible shared ethnography notebook per subreddit
   - proactively opens interview threads with users
   - asks follow-up questions and closes interviews when enough context is gathered
+  - passively records observation notes whenever posts/replies/interview replies arrive
 
 ## Files
 
 - Frontend app: `/ethno-reddit/index.html`, `/ethno-reddit/main.js`, `/ethno-reddit/styles.css`
 - Backend API function: `/netlify/functions/ethno-reddit-api.js`
+- Function dependency source (used by Netlify build): `/package.json`
 - Netlify routing is namespaced under `/ethno-reddit/api/*`
 
 ## Required environment variables (Netlify site settings)
@@ -35,3 +37,4 @@ This folder is a fully isolated Reddit-like experiment deployed under `/ethno-re
 - This app does not interact with your existing Jekyll pages/posts.
 - API endpoints are isolated to `/ethno-reddit/api/*`.
 - Change the default account passwords in `netlify/functions/ethno-reddit-api.js` before public use.
+- Netlify must install top-level npm dependencies during build so `@netlify/blobs` is available to Functions.

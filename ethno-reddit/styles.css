@@ -101,6 +101,8 @@ button.danger { background: var(--danger); }
   border-radius: 10px;
   padding: .65rem;
 }
+.card ul { margin: .4rem 0 0; padding-left: 1.1rem; }
+.card li { margin: .3rem 0; }
 .bubble-ai { background: #edf7ff; border-left: 3px solid #2563eb; padding: .4rem .5rem; border-radius: 6px; }
 .bubble-user { background: #f6f7f8; border-left: 3px solid #6b7280; padding: .4rem .5rem; border-radius: 6px; }
 

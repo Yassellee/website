@@ -3,9 +3,11 @@ const { getStore } = require("@netlify/blobs");
 
 const STATE_KEY = "state";
 const TOKEN_TTL_SECONDS = 60 * 60 * 24 * 7;
-const ETHNO_MIN_INTERVAL_MS = 45 * 1000;
+const HEARTBEAT_INTERVAL_MS = 45 * 1000;
 const MAX_OPEN_THREADS_PER_USER = 2;
 const MAX_RETRIES = 6;
+const MAX_EVENT_LOG = 800;
+const MAX_OBSERVATIONS = 120;
 
 const DEFAULT_USERS = [
   { username: "hiro", password: "hiro123" },
@@ -31,6 +33,15 @@ function safeText(input, maxLen) {
   const text = String(input || "").trim();
   if (!text) return "";
   return text.slice(0, maxLen);
+}
+
+function trimArray(arr, max, maxItemLen = 240) {
+  return Array.isArray(arr)
+    ? arr
+        .slice(0, max)
+        .map((x) => safeText(x, maxItemLen))
+        .filter(Boolean)
+    : [];
 }
 
 function hmacSecret() {
@@ -75,10 +86,33 @@ function verifyPassword(password, saltHex, expectedHash) {
   return a.length === b.length && crypto.timingSafeEqual(a, b);
 }
 
+function json(statusCode, payload) {
+  return {
+    statusCode,
+    headers: { "content-type": "application/json; charset=utf-8" },
+    body: JSON.stringify(payload),
+  };
+}
+
+function httpError(statusCode, message) {
+  const err = new Error(message);
+  err.statusCode = statusCode;
+  return err;
+}
+
+function parseJsonBody(event) {
+  if (!event.body) return {};
+  try {
+    return JSON.parse(event.body);
+  } catch {
+    return {};
+  }
+}
+
 function seedState() {
   const createdAt = nowIso();
   return {
-    version: 1,
+    version: 2,
     createdAt,
     users: DEFAULT_USERS.map((u) => {
       const salt = crypto.randomBytes(16).toString("hex");
@@ -95,25 +129,46 @@ function seedState() {
     replies: [],
     threads: [],
     ethnography: [],
+    eventLog: [],
     meta: {
       lastEthnographerRunAt: null,
+      processedEventCount: 0,
     },
   };
+}
+
+function migrateState(state) {
+  if (!Array.isArray(state.eventLog)) state.eventLog = [];
+  if (!state.meta) state.meta = {};
+  if (typeof state.meta.processedEventCount !== "number") state.meta.processedEventCount = 0;
+  if (!Array.isArray(state.ethnography)) state.ethnography = [];
+
+  for (const entry of state.ethnography) {
+    if (!Array.isArray(entry.observations)) entry.observations = [];
+    if (!Array.isArray(entry.patterns)) entry.patterns = [];
+    if (!Array.isArray(entry.openQuestions)) entry.openQuestions = [];
+    if (!entry.updatedAt) entry.updatedAt = nowIso();
+    if (!entry.summary) entry.summary = "No summary yet.";
+  }
+
+  state.version = 2;
+  return state;
 }
 
 async function loadState() {
   const store = getStore("ethno-reddit");
   const existing = await store.get(STATE_KEY, { type: "json" });
   const metadata = await store.getMetadata(STATE_KEY);
+
   if (existing) {
-    return { state: existing, etag: metadata ? metadata.etag : null };
+    return { state: migrateState(existing), etag: metadata ? metadata.etag : null };
   }
 
   const seeded = seedState();
   await store.setJSON(STATE_KEY, seeded, { onlyIfNew: true });
   const state = (await store.get(STATE_KEY, { type: "json" })) || seeded;
   const md = await store.getMetadata(STATE_KEY);
-  return { state, etag: md ? md.etag : null };
+  return { state: migrateState(state), etag: md ? md.etag : null };
 }
 
 async function saveState(state, etag) {
@@ -136,11 +191,11 @@ async function mutateState(mutator) {
   while (attempt < MAX_RETRIES) {
     attempt += 1;
     const { state, etag } = await loadState();
-    const snapshot = JSON.parse(JSON.stringify(state));
-    const result = await mutator(snapshot);
+    const draft = JSON.parse(JSON.stringify(state));
+    const result = await mutator(draft);
     try {
-      const newEtag = await saveState(snapshot, etag);
-      return { state: snapshot, etag: newEtag, result };
+      const newEtag = await saveState(draft, etag);
+      return { state: draft, etag: newEtag, result };
     } catch (err) {
       if (err && err.code === "CONFLICT") continue;
       throw err;
@@ -168,183 +223,229 @@ function parseAuthUsername(event) {
   return payload ? payload.username : null;
 }
 
-function json(statusCode, payload) {
-  return {
-    statusCode,
-    headers: { "content-type": "application/json; charset=utf-8" },
-    body: JSON.stringify(payload),
-  };
+async function requireUser(event) {
+  const username = parseAuthUsername(event);
+  if (!username) return null;
+  const { state } = await loadState();
+  if (!state.users.some((u) => u.username === username)) return null;
+  return username;
 }
 
-function httpError(statusCode, message) {
-  const err = new Error(message);
-  err.statusCode = statusCode;
-  return err;
+function resolveAction(event) {
+  const path = event.path || "";
+  const publicMarker = "/ethno-reddit/api/";
+  const fnMarker = "/.netlify/functions/ethno-reddit-api/";
+  if (path.includes(publicMarker)) return path.slice(path.indexOf(publicMarker) + publicMarker.length).split("/")[0];
+  if (path.includes(fnMarker)) return path.slice(path.indexOf(fnMarker) + fnMarker.length).split("/")[0];
+  return "";
 }
 
-function parseJsonBody(event) {
-  if (!event.body) return {};
-  try {
-    return JSON.parse(event.body);
-  } catch {
-    return {};
+function ensureEthnographyEntry(state, subredditId, subredditName) {
+  let entry = state.ethnography.find((e) => e.subredditId === subredditId);
+  if (!entry) {
+    entry = {
+      subredditId,
+      summary: `r/${subredditName} has no activity yet.`,
+      patterns: [],
+      openQuestions: [],
+      observations: [],
+      updatedAt: nowIso(),
+    };
+    state.ethnography.push(entry);
+  }
+  if (!Array.isArray(entry.observations)) entry.observations = [];
+  return entry;
+}
+
+function addObservation(entry, observation) {
+  entry.observations.push(observation);
+  if (entry.observations.length > MAX_OBSERVATIONS) {
+    entry.observations = entry.observations.slice(-MAX_OBSERVATIONS);
   }
 }
 
-function eventsForSubreddit(state, subredditId) {
-  const posts = state.posts
-    .filter((p) => p.subredditId === subredditId)
-    .map((p) => ({
-      type: "post",
-      id: p.id,
-      author: p.author,
-      title: p.title,
-      body: p.body,
-      createdAt: p.createdAt,
-    }));
-
-  const replies = state.replies
-    .map((r) => {
-      const post = state.posts.find((p) => p.id === r.postId);
-      if (!post || post.subredditId !== subredditId) return null;
-      return {
-        type: "reply",
-        id: r.id,
-        postId: r.postId,
-        author: r.author,
-        body: r.body,
-        createdAt: r.createdAt,
-      };
-    })
-    .filter(Boolean);
-
-  return [...posts, ...replies].sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+function addEvent(state, event) {
+  const normalized = {
+    id: id("evt"),
+    createdAt: nowIso(),
+    subredditId: event.subredditId || null,
+    actor: normalizeUsername(event.actor || "system"),
+    type: event.type,
+    postId: event.postId || null,
+    payload: event.payload || {},
+  };
+  state.eventLog.push(normalized);
+  while (state.eventLog.length > MAX_EVENT_LOG) {
+    state.eventLog.shift();
+    state.meta.processedEventCount = Math.max(0, state.meta.processedEventCount - 1);
+  }
+  return normalized;
 }
 
-function trimArray(arr, max) {
-  return Array.isArray(arr) ? arr.slice(0, max) : [];
+function addPassiveObservationFromEvent(state, evt) {
+  if (!evt.subredditId) return;
+  const subreddit = state.subreddits.find((s) => s.id === evt.subredditId);
+  if (!subreddit) return;
+  const entry = ensureEthnographyEntry(state, subreddit.id, subreddit.name);
+
+  let body = "";
+  if (evt.type === "post_created") {
+    body = `${evt.actor} created a post titled "${safeText(evt.payload.title, 80)}".`;
+  } else if (evt.type === "reply_created") {
+    body = `${evt.actor} replied in r/${subreddit.name}.`;
+  } else if (evt.type === "interview_reply") {
+    body = `${evt.actor} responded to an ethnography interview thread.`;
+  } else if (evt.type === "subreddit_created") {
+    body = `${evt.actor} created this subreddit.`;
+  }
+
+  if (!body) return;
+  addObservation(entry, {
+    id: id("obs"),
+    kind: "passive",
+    sourceEventId: evt.id,
+    createdAt: nowIso(),
+    body,
+  });
+  entry.updatedAt = nowIso();
+}
+
+function eventsForSubreddit(state, subredditId) {
+  return state.eventLog
+    .filter((e) => e.subredditId === subredditId)
+    .sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+}
+
+function userActivity(events) {
+  const counts = {};
+  for (const e of events) {
+    if (!e.actor || e.actor === "system") continue;
+    counts[e.actor] = (counts[e.actor] || 0) + 1;
+  }
+  return counts;
 }
 
 async function callOpenAIJSON({ model, system, user, fallback }) {
   if (!process.env.OPENAI_API_KEY) return fallback;
 
-  const response = await fetch("https://api.openai.com/v1/responses", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model,
-      input: [
-        { role: "system", content: system },
-        { role: "user", content: user },
-      ],
-      text: { format: { type: "json_object" } },
-    }),
-  });
-
-  if (!response.ok) {
-    return fallback;
-  }
-
-  const data = await response.json();
-  const raw = data.output_text || "";
-  if (!raw) return fallback;
-
   try {
+    const response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model,
+        input: [
+          { role: "system", content: system },
+          { role: "user", content: user },
+        ],
+        text: { format: { type: "json_object" } },
+      }),
+    });
+
+    if (!response.ok) return fallback;
+    const data = await response.json();
+    const raw = data.output_text || "";
+    if (!raw) return fallback;
     return JSON.parse(raw);
   } catch {
     return fallback;
   }
 }
 
-async function updateEthnographyForSubreddit(state, subreddit) {
-  const events = eventsForSubreddit(state, subreddit.id);
-  if (!events.length) return;
+function maybeOpenInterviewThread(state, subreddit, username, question) {
+  const user = normalizeUsername(username);
+  if (!state.users.some((u) => u.username === user)) return;
 
-  const recentEvents = events.slice(-35);
-  const activeUsers = [...new Set(recentEvents.map((e) => e.author).filter(Boolean))];
+  const openThreads = state.threads.filter(
+    (t) => t.subredditId === subreddit.id && t.username === user && t.status === "open"
+  );
+  if (openThreads.length >= MAX_OPEN_THREADS_PER_USER) return;
+
+  const hasRecentUnansweredAi = openThreads.some((t) => {
+    if (!t.messages.length) return false;
+    return t.messages[t.messages.length - 1].from === "ai";
+  });
+  if (hasRecentUnansweredAi) return;
+
+  state.threads.push({
+    id: id("thread"),
+    subredditId: subreddit.id,
+    username: user,
+    subject: `Interview on r/${subreddit.name}`,
+    status: "open",
+    createdAt: nowIso(),
+    updatedAt: nowIso(),
+    messages: [{ from: "ai", body: safeText(question, 350), createdAt: nowIso() }],
+  });
+}
+
+async function activeSubredditAnalysis(state, subreddit, newEvents) {
+  const entry = ensureEthnographyEntry(state, subreddit.id, subreddit.name);
+  const allEvents = eventsForSubreddit(state, subreddit.id).slice(-50);
+  const activity = userActivity(allEvents);
+  const activeUsers = Object.keys(activity);
 
   const fallback = {
-    summary: `r/${subreddit.name} has ${recentEvents.length} recent contributions from ${activeUsers.length} participants.`,
-    patterns: [
-      activeUsers.length > 1 ? "Multi-party interaction is present." : "Single-user activity dominates so far.",
+    summary: `r/${subreddit.name} has ${allEvents.length} logged events. Active participants: ${activeUsers.join(", ") || "none"}.`,
+    patterns: activeUsers.length > 1 ? ["Conversation is multi-participant."] : ["Most activity is from one participant."],
+    open_questions: ["What shared norm should members adopt in this subreddit?"],
+    field_notes: [
+      newEvents.length
+        ? `Observed ${newEvents.length} new events since last ethnography pass.`
+        : "No new events since the last pass.",
     ],
-    open_questions: ["What norms should this subreddit encourage?"],
-    outreach: activeUsers.slice(0, 2).map((u) => ({ username: u, question: `What motivated your latest contribution in r/${subreddit.name}?` })),
+    outreach: activeUsers.slice(0, 2).map((u) => ({ username: u, question: `What stood out to you in recent activity on r/${subreddit.name}?` })),
   };
 
-  const modelResult = await callOpenAIJSON({
+  const model = await callOpenAIJSON({
     model: "gpt-5-nano",
     system:
-      "You are an AI ethnographer studying online communities. Return strict JSON with keys: summary (string), patterns (array of strings), open_questions (array of strings), outreach (array of {username, question}). Keep questions non-sensitive and concise.",
-    user: JSON.stringify({ subreddit, recentEvents, users: state.users.map((u) => u.username) }),
+      "You are an AI ethnographer for an online forum. Return strict JSON with keys: summary (string), patterns (array of strings), open_questions (array), field_notes (array), outreach (array of {username, question}). Keep notes concrete, non-sensitive, and tied to observed behavior.",
+    user: JSON.stringify({
+      subreddit,
+      recentEvents: allEvents,
+      deltaEvents: newEvents,
+      activeUsers,
+      existingOpenQuestions: entry.openQuestions,
+    }),
     fallback,
   });
 
-  const summary = safeText(modelResult.summary, 1200) || fallback.summary;
-  const patterns = trimArray(modelResult.patterns, 6).map((x) => safeText(x, 220)).filter(Boolean);
-  const openQuestions = trimArray(modelResult.open_questions, 6).map((x) => safeText(x, 220)).filter(Boolean);
-  const outreach = trimArray(modelResult.outreach, 4)
-    .map((x) => ({ username: normalizeUsername(x.username), question: safeText(x.question, 300) }))
-    .filter((x) => x.username && x.question);
+  entry.summary = safeText(model.summary, 1300) || fallback.summary;
+  entry.patterns = trimArray(model.patterns, 8, 260);
+  entry.openQuestions = trimArray(model.open_questions, 8, 260);
+  entry.updatedAt = nowIso();
 
-  const entry = state.ethnography.find((e) => e.subredditId === subreddit.id);
-  if (entry) {
-    entry.summary = summary;
-    entry.patterns = patterns;
-    entry.openQuestions = openQuestions;
-    entry.updatedAt = nowIso();
-  } else {
-    state.ethnography.push({
-      subredditId: subreddit.id,
-      summary,
-      patterns,
-      openQuestions,
-      updatedAt: nowIso(),
+  for (const note of trimArray(model.field_notes, 6, 320)) {
+    addObservation(entry, {
+      id: id("obs"),
+      kind: "active",
+      sourceEventId: null,
+      createdAt: nowIso(),
+      body: note,
     });
   }
 
-  for (const suggestion of outreach) {
-    const username = normalizeUsername(suggestion.username);
-    if (!state.users.some((u) => u.username === username)) continue;
-
-    const openThreads = state.threads.filter(
-      (t) => t.subredditId === subreddit.id && t.username === username && t.status === "open"
-    );
-    if (openThreads.length >= MAX_OPEN_THREADS_PER_USER) continue;
-
-    const recentForUser = openThreads.find((t) => t.messages.length && t.messages[t.messages.length - 1].from === "ai");
-    if (recentForUser) continue;
-
-    state.threads.push({
-      id: id("thread"),
-      subredditId: subreddit.id,
-      username,
-      subject: `Interview on r/${subreddit.name}`,
-      status: "open",
-      createdAt: nowIso(),
-      updatedAt: nowIso(),
-      messages: [
-        {
-          from: "ai",
-          body: suggestion.question,
-          createdAt: nowIso(),
-        },
-      ],
-    });
+  const outreach = Array.isArray(model.outreach) ? model.outreach.slice(0, 4) : [];
+  for (const target of outreach) {
+    const username = normalizeUsername(target && target.username);
+    const question = safeText(target && target.question, 320);
+    if (!username || !question) continue;
+    maybeOpenInterviewThread(state, subreddit, username, question);
   }
 }
 
 async function progressThreads(state) {
-  const openNeedingFollowup = state.threads.filter((t) => {
+  const candidates = state.threads.filter((t) => {
     if (t.status !== "open") return false;
     if (!t.messages.length) return false;
     return t.messages[t.messages.length - 1].from === "user";
   });
 
-  for (const thread of openNeedingFollowup) {
+  for (const thread of candidates) {
     const subreddit = state.subreddits.find((s) => s.id === thread.subredditId);
     if (!subreddit) {
       thread.status = "closed";
@@ -352,56 +453,68 @@ async function progressThreads(state) {
       continue;
     }
 
-    const transcript = thread.messages.slice(-8);
+    const transcript = thread.messages.slice(-10);
     const fallback = {
-      action: transcript.length >= 6 ? "close" : "followup",
+      action: transcript.length >= 8 ? "close" : "followup",
       message:
-        transcript.length >= 6
-          ? "Thank you. I have enough information for now and will keep observing."
-          : `Thanks. Could you share one concrete example from r/${subreddit.name}?`,
+        transcript.length >= 8
+          ? "Thanks. I have enough context for now and will continue observing the subreddit."
+          : `Thanks. Can you give one specific example from r/${subreddit.name} that influenced your view?`,
     };
 
-    const modelResult = await callOpenAIJSON({
+    const model = await callOpenAIJSON({
       model: "gpt-5-nano",
       system:
-        "You are an AI ethnographer interviewer. Return strict JSON with action ('followup' or 'close') and message (string). Ask concise, non-sensitive questions; close when enough context has been gathered.",
+        "You are an ethnography interviewer. Return strict JSON with action ('followup' or 'close') and message (string). Ask concise non-sensitive questions and close gracefully when enough context is gathered.",
       user: JSON.stringify({ subreddit: subreddit.name, username: thread.username, transcript }),
       fallback,
     });
 
-    const action = modelResult.action === "close" ? "close" : "followup";
-    const message = safeText(modelResult.message, 350) || fallback.message;
-
-    if (action === "close") {
-      thread.messages.push({ from: "ai", body: message, createdAt: nowIso() });
-      thread.status = "closed";
-      thread.updatedAt = nowIso();
-    } else {
-      thread.messages.push({ from: "ai", body: message, createdAt: nowIso() });
-      thread.updatedAt = nowIso();
-    }
+    const action = model.action === "close" ? "close" : "followup";
+    const message = safeText(model.message, 350) || fallback.message;
+    thread.messages.push({ from: "ai", body: message, createdAt: nowIso() });
+    thread.updatedAt = nowIso();
+    if (action === "close") thread.status = "closed";
   }
 }
 
 async function runEthnographer(state, reason) {
   const nowMs = Date.now();
   const last = state.meta.lastEthnographerRunAt ? Date.parse(state.meta.lastEthnographerRunAt) : 0;
-  if (reason !== "manual" && nowMs - last < ETHNO_MIN_INTERVAL_MS) {
+
+  if (reason === "heartbeat" && nowMs - last < HEARTBEAT_INTERVAL_MS) {
     return;
   }
 
-  for (const subreddit of state.subreddits) {
+  const processed = Math.max(0, Math.min(state.meta.processedEventCount || 0, state.eventLog.length));
+  const newEvents = state.eventLog.slice(processed);
+
+  const targetSubredditIds = new Set();
+  for (const evt of newEvents) {
+    if (evt.subredditId) targetSubredditIds.add(evt.subredditId);
+  }
+  if (reason === "manual" || reason === "heartbeat") {
+    for (const sub of state.subreddits) targetSubredditIds.add(sub.id);
+  }
+
+  for (const subredditId of targetSubredditIds) {
+    const subreddit = state.subreddits.find((s) => s.id === subredditId);
+    if (!subreddit) continue;
+    const delta = newEvents.filter((e) => e.subredditId === subredditId);
     try {
-      await updateEthnographyForSubreddit(state, subreddit);
+      await activeSubredditAnalysis(state, subreddit, delta);
     } catch {
-      // Keep core CRUD available even when ethnography refresh fails.
+      // Keep product operations working even when active analysis fails.
     }
   }
+
   try {
     await progressThreads(state);
   } catch {
-    // Keep core CRUD available even when interview progression fails.
+    // Keep product operations working even when thread progression fails.
   }
+
+  state.meta.processedEventCount = state.eventLog.length;
   state.meta.lastEthnographerRunAt = nowIso();
 }
 
@@ -409,7 +522,6 @@ async function handleLogin(event) {
   const body = parseJsonBody(event);
   const username = normalizeUsername(body.username);
   const password = String(body.password || "");
-
   if (!username || !password) return json(400, { error: "Username and password are required" });
 
   const { state } = await loadState();
@@ -423,38 +535,24 @@ async function handleLogin(event) {
   return json(200, { token, user: { username } });
 }
 
-async function requireUser(event) {
-  const username = parseAuthUsername(event);
-  if (!username) return null;
-  const { state } = await loadState();
-  if (!state.users.some((u) => u.username === username)) return null;
-  return username;
-}
-
-function resolveAction(event) {
-  const path = event.path || "";
-  const publicMarker = "/ethno-reddit/api/";
-  const fnMarker = "/.netlify/functions/ethno-reddit-api/";
-  if (path.includes(publicMarker)) {
-    return path.slice(path.indexOf(publicMarker) + publicMarker.length).split("/")[0];
-  }
-  if (path.includes(fnMarker)) {
-    return path.slice(path.indexOf(fnMarker) + fnMarker.length).split("/")[0];
-  }
-  return "";
-}
-
 exports.handler = async (event) => {
   try {
     if (event.httpMethod === "OPTIONS") {
-      return { statusCode: 204, headers: { "access-control-allow-origin": "*", "access-control-allow-methods": "GET,POST,DELETE,OPTIONS", "access-control-allow-headers": "content-type,authorization" } };
+      return {
+        statusCode: 204,
+        headers: {
+          "access-control-allow-origin": "*",
+          "access-control-allow-methods": "GET,POST,DELETE,OPTIONS",
+          "access-control-allow-headers": "content-type,authorization",
+        },
+      };
     }
 
     const action = resolveAction(event);
     if (!action) return json(404, { error: "Not found" });
 
     if (action === "login" && event.httpMethod === "POST") {
-      return await handleLogin(event);
+      return handleLogin(event);
     }
 
     const username = await requireUser(event);
@@ -473,15 +571,27 @@ exports.handler = async (event) => {
 
       const { state } = await mutateState(async (draft) => {
         if (draft.subreddits.some((s) => s.name === name)) throw httpError(400, "Subreddit already exists");
-        draft.subreddits.push({
+
+        const subreddit = {
           id: id("sub"),
           name,
           description,
           createdBy: username,
           createdAt: nowIso(),
+        };
+        draft.subreddits.push(subreddit);
+        ensureEthnographyEntry(draft, subreddit.id, subreddit.name);
+
+        const evt = addEvent(draft, {
+          subredditId: subreddit.id,
+          actor: username,
+          type: "subreddit_created",
+          payload: { name: subreddit.name },
         });
+        addPassiveObservationFromEvent(draft, evt);
         await runEthnographer(draft, "mutation");
       });
+
       return json(200, publicState(state, username));
     }
 
@@ -500,8 +610,10 @@ exports.handler = async (event) => {
         draft.replies = draft.replies.filter((r) => !postIds.has(r.postId));
         draft.ethnography = draft.ethnography.filter((e) => e.subredditId !== subredditId);
         draft.threads = draft.threads.filter((t) => t.subredditId !== subredditId);
-        await runEthnographer(draft, "mutation");
+        draft.eventLog = draft.eventLog.filter((e) => e.subredditId !== subredditId);
+        draft.meta.processedEventCount = Math.min(draft.meta.processedEventCount, draft.eventLog.length);
       });
+
       return json(200, publicState(state, username));
     }
 
@@ -510,20 +622,35 @@ exports.handler = async (event) => {
       const subredditId = String(body.subredditId || "");
       const title = safeText(body.title, 120);
       const postBody = safeText(body.body, 3000);
-      if (!subredditId || !title || !postBody) return json(400, { error: "subredditId, title and body are required" });
+      if (!subredditId || !title || !postBody) {
+        return json(400, { error: "subredditId, title and body are required" });
+      }
 
       const { state } = await mutateState(async (draft) => {
         if (!draft.subreddits.some((s) => s.id === subredditId)) throw httpError(404, "Subreddit not found");
-        draft.posts.push({
+
+        const post = {
           id: id("post"),
           subredditId,
           title,
           body: postBody,
           author: username,
           createdAt: nowIso(),
+        };
+        draft.posts.push(post);
+
+        const evt = addEvent(draft, {
+          subredditId,
+          actor: username,
+          type: "post_created",
+          postId: post.id,
+          payload: { title: post.title },
         });
+        addPassiveObservationFromEvent(draft, evt);
+
         await runEthnographer(draft, "mutation");
       });
+
       return json(200, publicState(state, username));
     }
 
@@ -533,12 +660,22 @@ exports.handler = async (event) => {
       if (!postId) return json(400, { error: "postId is required" });
 
       const { state } = await mutateState(async (draft) => {
-        const exists = draft.posts.some((p) => p.id === postId);
-        if (!exists) throw httpError(404, "Post not found");
+        const post = draft.posts.find((p) => p.id === postId);
+        if (!post) throw httpError(404, "Post not found");
+
         draft.posts = draft.posts.filter((p) => p.id !== postId);
         draft.replies = draft.replies.filter((r) => r.postId !== postId);
+
+        addEvent(draft, {
+          subredditId: post.subredditId,
+          actor: username,
+          type: "post_deleted",
+          postId,
+          payload: { title: post.title },
+        });
         await runEthnographer(draft, "mutation");
       });
+
       return json(200, publicState(state, username));
     }
 
@@ -549,16 +686,30 @@ exports.handler = async (event) => {
       if (!postId || !replyBody) return json(400, { error: "postId and body are required" });
 
       const { state } = await mutateState(async (draft) => {
-        if (!draft.posts.some((p) => p.id === postId)) throw httpError(404, "Post not found");
-        draft.replies.push({
+        const post = draft.posts.find((p) => p.id === postId);
+        if (!post) throw httpError(404, "Post not found");
+
+        const reply = {
           id: id("reply"),
           postId,
           body: replyBody,
           author: username,
           createdAt: nowIso(),
+        };
+        draft.replies.push(reply);
+
+        const evt = addEvent(draft, {
+          subredditId: post.subredditId,
+          actor: username,
+          type: "reply_created",
+          postId,
+          payload: { body: safeText(replyBody, 120) },
         });
+        addPassiveObservationFromEvent(draft, evt);
+
         await runEthnographer(draft, "mutation");
       });
+
       return json(200, publicState(state, username));
     }
 
@@ -568,11 +719,24 @@ exports.handler = async (event) => {
       if (!replyId) return json(400, { error: "replyId is required" });
 
       const { state } = await mutateState(async (draft) => {
-        const exists = draft.replies.some((r) => r.id === replyId);
-        if (!exists) throw httpError(404, "Reply not found");
+        const reply = draft.replies.find((r) => r.id === replyId);
+        if (!reply) throw httpError(404, "Reply not found");
+
+        const post = draft.posts.find((p) => p.id === reply.postId);
         draft.replies = draft.replies.filter((r) => r.id !== replyId);
+
+        if (post) {
+          addEvent(draft, {
+            subredditId: post.subredditId,
+            actor: username,
+            type: "reply_deleted",
+            postId: post.id,
+            payload: {},
+          });
+        }
         await runEthnographer(draft, "mutation");
       });
+
       return json(200, publicState(state, username));
     }
 
@@ -586,10 +750,21 @@ exports.handler = async (event) => {
         const thread = draft.threads.find((t) => t.id === threadId && t.username === username);
         if (!thread) throw httpError(404, "Thread not found");
         if (thread.status !== "open") throw httpError(400, "Thread is closed");
+
         thread.messages.push({ from: "user", body: msg, createdAt: nowIso() });
         thread.updatedAt = nowIso();
+
+        const evt = addEvent(draft, {
+          subredditId: thread.subredditId,
+          actor: username,
+          type: "interview_reply",
+          payload: { body: safeText(msg, 120) },
+        });
+        addPassiveObservationFromEvent(draft, evt);
+
         await runEthnographer(draft, "mutation");
       });
+
       return json(200, publicState(state, username));
     }
 
