@@ -608,24 +608,39 @@ footer a:hover {
   }
 
   .profile {
-    position: relative;
-    display: block;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .profile-photo {
+    order: -1;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .profile-photo img {
+    width: 110px;
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+
+  .social-links {
+    flex: 1;
+    min-width: 120px;
+    padding-top: 0;
+  }
+
+  .news-badge {
+    flex-basis: 100%;
+    margin-top: 4px;
   }
 
   .profile-text h1 {
     font-size: 26px;
-    margin-right: 140px;
-  }
-
-  .profile-photo {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 120px;
-  }
-
-  .profile-photo img {
-    border-radius: 10px;
   }
 
   .paper-card {
@@ -656,21 +671,16 @@ footer a:hover {
 }
 
 @media (max-width: 480px) {
+  .profile-photo img {
+    width: 90px;
+  }
+
   .profile-text h1 {
     font-size: 22px;
-    margin-right: 110px;
   }
 
   .name-cn {
     font-size: 18px;
-  }
-
-  .profile-photo {
-    width: 95px;
-  }
-
-  .paper-image-wrap {
-    max-width: none;
   }
 
   .social-links {
