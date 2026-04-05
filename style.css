@@ -241,34 +241,66 @@ img {
 }
 
 /* ============================================
-   Papers Section
+   Content Section & Tabs
    ============================================ */
 
-.papers-section {
+.content-section {
   margin-bottom: 48px;
 }
 
 .section-header {
   display: flex;
   align-items: baseline;
-  gap: 16px;
-  margin-bottom: 28px;
-  padding-bottom: 12px;
+  margin-bottom: 0;
   border-bottom: 2px solid #e2e8f0;
 }
 
-.section-header h2 {
+.section-tabs {
+  display: flex;
+  gap: 0;
+}
+
+.section-tab {
+  background: none;
+  border: none;
+  font-family: inherit;
   font-size: 22px;
   font-weight: 600;
-  margin: 0;
+  color: #a0aec0;
+  padding: 0 0 12px 0;
+  margin-right: 32px;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s ease;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+}
+
+.section-tab:last-child {
+  margin-right: 0;
+}
+
+.section-tab:hover {
+  color: #4a5568;
+}
+
+.section-tab.active {
   color: #1a202c;
+  border-bottom-color: #2b6cb0;
+}
+
+.section-tab span {
+  pointer-events: none;
+}
+
+.papers-toggle {
+  padding: 8px 0 0 0;
 }
 
 .toggle-link {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 500;
   color: #2b6cb0;
-  white-space: nowrap;
 }
 
 .toggle-link:hover {
@@ -512,6 +544,95 @@ img {
 }
 
 /* ============================================
+   Invited Talks Section
+   ============================================ */
+
+.talk-group {
+  padding: 24px 0;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.talk-group:last-child {
+  border-bottom: none;
+}
+
+.talk-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  line-height: 1.4;
+  color: #1a202c;
+}
+
+.talk-venues {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.talk-venue {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.talk-venue:hover {
+  background-color: #f7fafc;
+}
+
+.talk-logo {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  opacity: 0.8;
+  filter: grayscale(20%);
+  transition: opacity 0.2s ease, filter 0.2s ease;
+}
+
+.talk-venue:hover .talk-logo {
+  opacity: 1;
+  filter: grayscale(0%);
+}
+
+.talk-venue-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.talk-institution {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a202c;
+  line-height: 1.4;
+}
+
+.talk-dept {
+  display: block;
+  font-size: 13px;
+  font-weight: 400;
+  color: #718096;
+  line-height: 1.4;
+  margin-top: 1px;
+}
+
+.talk-date {
+  flex-shrink: 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: #2b6cb0;
+  background: #ebf4ff;
+  padding: 4px 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* ============================================
    Image Modal
    ============================================ */
 
@@ -664,9 +785,31 @@ footer a:hover {
 
   .section-header {
     flex-direction: column;
-    gap: 8px;
-    text-align: center;
+    gap: 4px;
     align-items: center;
+  }
+
+  .section-tabs {
+    justify-content: center;
+  }
+
+  .section-tab {
+    font-size: 18px;
+    margin-right: 24px;
+  }
+
+  .toggle-link {
+    padding-bottom: 0;
+  }
+
+  .talk-venue {
+    gap: 12px;
+    padding: 8px 10px;
+  }
+
+  .talk-logo {
+    width: 30px;
+    height: 30px;
   }
 }
 

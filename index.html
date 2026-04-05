@@ -23,6 +23,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="papers.js"></script>
+  <script src="talks.js"></script>
 </head>
 
 <body>
@@ -136,13 +137,23 @@
       </div>
     </section>
 
-    <!-- Papers Section -->
-    <section class="papers-section">
+    <!-- Content Section with Tabs -->
+    <section class="content-section">
       <div class="section-header">
-        <h2 id="sectionTitle">Selected Papers</h2>
-        <a href="#" onclick="togglePapersView(); return false;" id="toggleLink" class="toggle-link">see all</a>
+        <nav class="section-tabs">
+          <button class="section-tab active" data-tab="papers" onclick="switchTab('papers')">
+            <span id="sectionTitle">Selected Papers</span>
+          </button>
+          <button class="section-tab" data-tab="talks" onclick="switchTab('talks')">
+            <span>Invited Talks</span>
+          </button>
+        </nav>
       </div>
-      <div id="papersContainer"></div>
+      <div id="papersToggle" class="papers-toggle">
+        <a href="#" onclick="togglePapersView(); return false;" id="toggleLink" class="toggle-link">See all papers</a>
+      </div>
+      <div id="papersContainer" class="tab-content"></div>
+      <div id="talksContainer" class="tab-content" style="display: none;"></div>
     </section>
 
     <footer>
@@ -161,6 +172,27 @@
 
   <script>
     let currentView = 'selected';
+    let currentTab = 'papers';
+
+    function switchTab(tab) {
+      currentTab = tab;
+      const papersContainer = document.getElementById('papersContainer');
+      const talksContainer = document.getElementById('talksContainer');
+      const papersToggle = document.getElementById('papersToggle');
+      const tabs = document.querySelectorAll('.section-tab');
+
+      tabs.forEach(t => t.classList.toggle('active', t.getAttribute('data-tab') === tab));
+
+      if (tab === 'papers') {
+        papersContainer.style.display = '';
+        talksContainer.style.display = 'none';
+        papersToggle.style.display = '';
+      } else {
+        papersContainer.style.display = 'none';
+        talksContainer.style.display = '';
+        papersToggle.style.display = 'none';
+      }
+    }
 
     function renderPapers() {
       const container = document.getElementById('papersContainer');
@@ -248,13 +280,13 @@
 
       if (currentView === 'selected') {
         currentView = 'all';
-        sectionTitle.textContent = 'Papers';
-        toggleLink.textContent = 'see selected';
+        sectionTitle.textContent = 'All Papers';
+        toggleLink.textContent = 'See selected';
         paperCards.forEach(card => card.classList.remove('hidden'));
       } else {
         currentView = 'selected';
         sectionTitle.textContent = 'Selected Papers';
-        toggleLink.textContent = 'see all';
+        toggleLink.textContent = 'See all papers';
         paperCards.forEach(card => {
           const visibility = card.getAttribute('data-visibility');
           if (visibility === 'selected' || visibility === 'both') {
@@ -430,8 +462,29 @@
       });
     }
 
-    // Render papers on load
-    document.addEventListener('DOMContentLoaded', renderPapers);
+    function renderTalks() {
+      const container = document.getElementById('talksContainer');
+      container.innerHTML = talks.map(talk => {
+        const venueItems = talk.venues.map(v =>
+          `<div class="talk-venue">
+            <img src="${v.logo}" alt="${v.institution}" class="talk-logo" />
+            <div class="talk-venue-info">
+              <span class="talk-institution">${v.institution}</span>
+              <span class="talk-dept">${v.department}</span>
+            </div>
+            <span class="talk-date">${v.date}</span>
+          </div>`
+        ).join('');
+
+        return `<div class="talk-group">
+          <h3 class="talk-title">${talk.title}</h3>
+          <div class="talk-venues">${venueItems}</div>
+        </div>`;
+      }).join('');
+    }
+
+    // Render papers and talks on load
+    document.addEventListener('DOMContentLoaded', () => { renderPapers(); renderTalks(); });
   </script>
 </body>
 
