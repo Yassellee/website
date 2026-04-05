@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "/opt/homebrew/bin/python3.12",
+      "runtimeArgs": ["-c", "import http.server,os;os.chdir('/Users/yuxuanll/Desktop/projects/website');http.server.test(HandlerClass=http.server.SimpleHTTPRequestHandler,port=8080)"],
+      "port": 8080
+    }
+  ]
+}
