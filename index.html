@@ -58,7 +58,7 @@
           </div>
         </div>
         <p>
-          I hold a BS in Computer Science from <a href="https://www.tsinghua.edu.cn/en/" target="_blank">Tsinghua University</a>, advised by <a href="https://pi.cs.tsinghua.edu.cn/lab/people/ChunYu/" target="_blank">Chun Yu</a> and <a href="https://www.cs.tsinghua.edu.cn/csen/info/1306/4332.htm" target="_blank">Yuanchun Shi</a>. I was also a research intern at <a href="https://www.berkeley.edu/" target="_blank">UC Berkeley</a>, advised by <a href="https://people.ischool.berkeley.edu/~coye/" target="_blank">Coye Cheshire</a>. My research has received <a href="#" id="mediaCoverageToggle" class="media-coverage-toggle">extensive media coverage</a> and led to invited talks at institutions such as CMU, Georgia Tech, Tsinghua, HKU and Microsoft.
+          I hold a BS in Computer Science from <a href="https://www.tsinghua.edu.cn/en/" target="_blank">Tsinghua University</a>, advised by <a href="https://www.cs.tsinghua.edu.cn/csen/info/1307/4341.htm" target="_blank">Chun Yu</a> and <a href="https://www.cs.tsinghua.edu.cn/csen/info/1306/4332.htm" target="_blank">Yuanchun Shi</a>. I was also a research intern at <a href="https://www.berkeley.edu/" target="_blank">UC Berkeley</a>, advised by <a href="https://people.ischool.berkeley.edu/~coye/" target="_blank">Coye Cheshire</a>. My research has received <a href="#" id="mediaCoverageToggle" class="media-coverage-toggle">extensive media coverage</a> and led to invited talks at institutions such as CMU, Georgia Tech, Tsinghua, HKU and Microsoft.
         </p>
 
         <div id="bioMediaCoverage" class="bio-media-coverage" style="display: none;">
@@ -199,7 +199,7 @@
       container.innerHTML = papers.map((post, i) => {
         const hasEqualContrib = post.authors.includes('*');
         const authorsHtml = hasEqualContrib
-          ? post.authors.replace(/\*/g, '<sup>*</sup>') + ' <small>(*denotes equal contribution)</small>'
+          ? post.authors.replace(/\*/g, '<sup>*</sup>')
           : post.authors;
 
         const links = [];

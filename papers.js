@@ -127,7 +127,7 @@ const papers = [
   },
   {
     "title": "How Well Can LLM Agents Simulate End-User Security and Privacy Attitudes and Behaviors?",
-    "authors": "<span class=\"author-highlight\">Yuxuan Li</span>, Leyang Li, Hao-Ping (Hank) Lee, Sauvik Das",
+    "authors": "<span class=\"author-highlight\">Yuxuan Li*</span>, Leyang Li*, Hao-Ping (Hank) Lee, Sauvik Das",
     "venue": "Under review at USENIX Security 2026",
     "venue_short": "USENIX Security 2026 (Under Review)",
     "visibility": "both",
