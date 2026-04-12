@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>CHI 2026 · My Schedule</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #F6F1EB;
+  --bg-card: #FFFDF9;
+  --ink: #1A1714;
+  --ink-soft: #6B6560;
+  --ink-faint: #A9A29B;
+  --accent-workshop: #2D5A3D;
+  --accent-panel: #7B4B94;
+  --accent-paper: #C4622D;
+  --accent-social: #1B6B8A;
+  --accent-organize: #B8860B;
+  --conflict: #C0392B;
+  --conflict-bg: #FDF0EE;
+  --border: #E4DDD5;
+  --border-active: #C8BFB4;
+  --radius: 10px;
+  --shadow-sm: 0 1px 3px rgba(26,23,20,0.06);
+  --shadow-md: 0 4px 16px rgba(26,23,20,0.08);
+  --shadow-lg: 0 8px 32px rgba(26,23,20,0.1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 100px;
+}
+
+/* ── HEADER ── */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(246,241,235,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 20px 0;
+}
+
+.header-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.logo {
+  font-family: 'Instrument Serif', serif;
+  font-size: 28px;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+}
+
+.logo span {
+  font-style: italic;
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+
+.header-subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* ── DAY TABS ── */
+.day-tabs {
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin: 0 -20px;
+  padding: 0 20px;
+}
+.day-tabs::-webkit-scrollbar { display: none; }
+
+.day-tab {
+  flex-shrink: 0;
+  padding: 10px 14px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-faint);
+  background: none;
+  border: none;
+  border-bottom: 2.5px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+}
+
+.day-tab:hover { color: var(--ink-soft); }
+
+.day-tab.active {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
+.day-tab .tab-day {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.day-tab .tab-date {
+  font-family: 'Instrument Serif', serif;
+  font-size: 20px;
+}
+
+.day-tab .conflict-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--conflict);
+  border-radius: 50%;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+/* ── CONTENT ── */
+.content { padding: 20px; }
+
+.day-section { display: none; }
+.day-section.active { display: block; }
+
+.day-header {
+  font-family: 'Instrument Serif', serif;
+  font-size: 32px;
+  margin-bottom: 4px;
+  letter-spacing: -0.5px;
+}
+
+.day-date-full {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 20px;
+}
+
+/* ── EVENT CARDS ── */
+.event-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  transition: all 0.2s;
+  overflow: hidden;
+}
+
+.event-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: var(--radius) 0 0 var(--radius);
+}
+
+.event-card[data-type="workshop"]::before { background: var(--accent-workshop); }
+.event-card[data-type="panel"]::before { background: var(--accent-panel); }
+.event-card[data-type="paper"]::before { background: var(--accent-paper); }
+.event-card[data-type="social"]::before { background: var(--accent-social); }
+.event-card[data-type="organize"]::before { background: var(--accent-organize); }
+
+.event-card.conflict {
+  border-color: var(--conflict);
+  background: var(--conflict-bg);
+}
+
+.conflict-badge {
+  display: none;
+  align-items: center;
+  gap: 5px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--conflict);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+}
+
+.conflict .conflict-badge { display: flex; }
+
+.conflict-badge svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.event-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.event-type-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  color: white;
+}
+
+.event-card[data-type="workshop"] .event-type-tag { background: var(--accent-workshop); }
+.event-card[data-type="panel"] .event-type-tag { background: var(--accent-panel); }
+.event-card[data-type="paper"] .event-type-tag { background: var(--accent-paper); }
+.event-card[data-type="social"] .event-type-tag { background: var(--accent-social); }
+.event-card[data-type="organize"] .event-type-tag { background: var(--accent-organize); }
+
+.event-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 18px;
+  line-height: 1.3;
+  margin-bottom: 4px;
+  letter-spacing: -0.2px;
+}
+
+.event-meta {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+.event-meta .room {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  background: rgba(26,23,20,0.05);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.event-note {
+  margin-top: 8px;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--ink-faint);
+}
+
+.event-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--accent-social);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.event-link:hover { text-decoration: underline; }
+
+/* ── DONE TOGGLE ── */
+.done-toggle {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--border-active);
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.done-toggle svg {
+  width: 14px;
+  height: 14px;
+  opacity: 0;
+  transition: opacity 0.15s;
+  stroke: white;
+}
+
+.event-card.done .done-toggle {
+  background: var(--accent-workshop);
+  border-color: var(--accent-workshop);
+}
+
+.event-card.done .done-toggle svg { opacity: 1; }
+
+.event-card.done {
+  opacity: 0.45;
+}
+
+.event-card.done .event-title {
+  text-decoration: line-through;
+  text-decoration-color: var(--ink-faint);
+}
+
+/* ── UNSCHEDULED ── */
+.unscheduled-section {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--border-active);
+}
+
+.unscheduled-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--ink-faint);
+  margin-bottom: 12px;
+}
+
+/* ── LEGEND ── */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  margin-top: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+/* ── TIME DIVIDERS ── */
+.time-block-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--ink-faint);
+  margin: 24px 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.time-block-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── NO EVENTS ── */
+.empty-note {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.event-card {
+  animation: slideUp 0.3s ease both;
+}
+
+.event-card:nth-child(2) { animation-delay: 0.03s; }
+.event-card:nth-child(3) { animation-delay: 0.06s; }
+.event-card:nth-child(4) { animation-delay: 0.09s; }
+.event-card:nth-child(5) { animation-delay: 0.12s; }
+.event-card:nth-child(6) { animation-delay: 0.15s; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-active); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo">CHI <span>'26</span></div>
+    <div class="header-subtitle">Barcelona · Apr 13–17</div>
+  </div>
+  <div class="day-tabs" id="dayTabs"></div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent-workshop)"></div>Workshop</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent-panel)"></div>Panel</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent-paper)"></div>Paper</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent-social)"></div>Social</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent-organize)"></div>Organizing</div>
+</div>
+
+<div class="content" id="content"></div>
+
+<script>
+const EVENTS = [
+  // ── MONDAY APR 13 ──
+  {
+    day: "2026-04-13",
+    time: "11:15",
+    endTime: "11:27",
+    type: "paper",
+    title: "Trust Formation in AI Delegation: The Interplay of Explainability and Anthropomorphism",
+    room: "Room 130",
+    note: null,
+    conflictGroup: null
+  },
+  {
+    day: "2026-04-13",
+    time: "14:15",
+    endTime: "15:45",
+    type: "workshop",
+    title: "W29: From Generation to Simulation — Responsible Use of AI Personas in Human-Centered Design and Research",
+    room: null,
+    note: "Join first half",
+    conflictGroup: null
+  },
+  {
+    day: "2026-04-13",
+    time: "16:30",
+    endTime: "18:00",
+    type: "workshop",
+    title: "W68: Workshop on Developing Standards and Documentation For LLM Use as Simulated Research Participants",
+    room: null,
+    note: "Short workshop",
+    conflictGroup: null
+  },
+
+  // ── TUESDAY APR 14 ──
+  {
+    day: "2026-04-14",
+    time: "10:12",
+    endTime: "10:24",
+    type: "paper",
+    title: "CoBRA: Programming Cognitive Bias in Social Agents Using Classic Social Science Experiments",
+    room: "Room 122",
+    note: null,
+    conflictGroup: null
+  },
+  {
+    day: "2026-04-14",
+    time: "14:15",
+    endTime: "15:45",
+    type: "workshop",
+    title: "W36: Human Expertise for AI Red-Teaming and Scalable Evaluation",
+    room: null,
+    note: "Join first half",
+    conflictGroup: null
+  },
+  {
+    day: "2026-04-14",
+    time: "16:30",
+    endTime: "18:00",
+    type: "panel",
+    title: "P4: AI Agents and the Future of Deliberation — Designing Human–AI Collaboration for Democratic Dialogue",
+    room: null,
+    note: null,
+    conflictGroup: null
+  },
+  {
+    day: "2026-04-14",
+    time: "18:00",
+    endTime: "late",
+    type: "social",
+    title: "CMU Party",
+    room: null,
+    note: null,
+    conflictGroup: "tue-evening"
+  },
+  {
+    day: "2026-04-14",
+    time: "18:00",
+    endTime: "late",
+    type: "social",
+    title: "China CHI Party",
+    room: null,
+    note: null,
+    conflictGroup: "tue-evening"
+  },
+
+  // ── WEDNESDAY APR 15 ──
+  {
+    day: "2026-04-15",
+    time: "09:00",
+    endTime: "09:12",
+    type: "paper",
+    title: "Supporting Informed Self-Disclosure: Design Recommendations for Presenting AI-Estimates of Privacy Risks to Users",
+    room: "Room 123",
+    note: "Isadora's paper",
+    conflictGroup: null
+  },
+  {
+    day: "2026-04-15",
+    time: "11:15",
+    endTime: "11:27",
+    type: "paper",
+    title: "Evidotes: Integrating Scientific Evidence and Anecdotes to Support Uncertainties Triggered by Peer Health Posts",
+    room: "Room 134",
+    note: "Shreya's paper",
+    conflictGroup: null
+  },
+  {
+    day: "2026-04-15",
+    time: "11:27",
+    endTime: "11:39",
+    type: "paper",
+    title: "Friend, Foe, or Bot? Exploring Intergroup Dynamics in Hybrid Human-Bot Teams",
+    room: "Room 125",
+    note: null,
+    conflictGroup: null
+  },
+  {
+    day: "2026-04-15",
+    time: "11:39",
+    endTime: "11:51",
+    type: "paper",
+    title: "Determining Perception Thresholds for Real and Virtual Inclinations While Cycling in Virtual Reality",
+    room: "Area 1+2+3: Theatre",
+    note: null,
+    conflictGroup: null
+  },
+  {
+    day: "2026-04-15",
+    time: "12:03",
+    endTime: "12:15",
+    type: "paper",
+    title: "GTA: Generative Traffic Agents for Simulating Realistic Mobility Behavior",
+    room: "Room 127",
+    note: null,
+    conflictGroup: null
+  },
+  {
+    day: "2026-04-15",
+    time: "12:15",
+    endTime: "13:30",
+    type: "social",
+    title: "Spud@CHI Lunch",
+    room: null,
+    note: null,
+    conflictGroup: "wed-lunch"
+  },
+  {
+    day: "2026-04-15",
+    time: "12:15",
+    endTime: "13:30",
+    type: "social",
+    title: "Human-Agent Interaction Lunch",
+    room: null,
+    note: "Also possible Thursday lunch",
+    conflictGroup: "wed-lunch"
+  },
+  {
+    day: "2026-04-15",
+    time: "14:15",
+    endTime: "15:45",
+    type: "panel",
+    title: "P5: The Global Impact of Generative AI on the HCI Landscape",
+    room: null,
+    note: "International Perspectives on HCI Education, Industry Dynamics, and Funding",
+    conflictGroup: null
+  },
+  {
+    day: "2026-04-15",
+    time: "16:30",
+    endTime: "18:00",
+    type: "workshop",
+    title: "W59: Third Workshop on Human-Centered Evaluation and Auditing of Language Models — AI Agents-in-the-Loop",
+    room: null,
+    note: "Join second half",
+    conflictGroup: null
+  },
+
+  // ── THURSDAY APR 16 ──
+  {
+    day: "2026-04-16",
+    time: "09:24",
+    endTime: "09:36",
+    type: "paper",
+    title: "Investigating How Leaders Decide on AI Innovations: Opportunities for HCI",
+    room: "Room 123",
+    note: "Shixian's paper",
+    conflictGroup: null
+  },
+  {
+    day: "2026-04-16",
+    time: "11:39",
+    endTime: "11:51",
+    type: "paper",
+    title: "GazeCoT: Unleashing Social Intelligence in Multimodal LLMs With Gaze-Informed Chain-of-Thought Reasoning",
+    room: "Area 1+2+3: Theatre",
+    note: null,
+    conflictGroup: null
+  },
+  {
+    day: "2026-04-16",
+    time: "14:15",
+    endTime: "18:00",
+    type: "organize",
+    title: "PoliSim: LLM Agent Simulation for Policy",
+    room: "Room 111",
+    note: "You're organizing this",
+    conflictGroup: null
+  },
+
+  // ── FRIDAY APR 17 ──
+  {
+    day: "2026-04-17",
+    time: "09:00",
+    endTime: "09:12",
+    type: "paper",
+    title: "Do Teachers Dream of GenAI Widening Educational (In)equality? Envisioning the Future of K-12 GenAI Education from Global Teachers' Perspectives",
+    room: "Room 123",
+    note: "Ruiwei's paper",
+    conflictGroup: null
+  },
+  {
+    day: "2026-04-17",
+    time: "10:00",
+    endTime: "10:12",
+    type: "paper",
+    title: "All Futures at Once: Supporting Speculative Design for Placemaking with Multi-Agent Social Simulation",
+    room: "Room 134",
+    note: null,
+    conflictGroup: "fri-10am"
+  },
+  {
+    day: "2026-04-17",
+    time: "10:00",
+    endTime: "10:12",
+    type: "paper",
+    title: "Privy: Envisioning and Mitigating Privacy Risks for Consumer-facing AI Product Concepts",
+    room: "Room 117",
+    note: "Hank's paper",
+    conflictGroup: "fri-10am"
+  }
+];
+
+const UNSCHEDULED = [
+  {
+    type: "paper",
+    title: "Interview-Informed Generative Agents for Product Discovery: A Validation Study",
+    note: "No scheduled presentation time",
+    link: "https://www.youtube.com/watch?v=ARuk-e1DOBc",
+    linkLabel: "Watch video"
+  }
+];
+
+const DAYS = [
+  { key: "2026-04-13", short: "Mon", date: "13", full: "Monday, April 13" },
+  { key: "2026-04-14", short: "Tue", date: "14", full: "Tuesday, April 14" },
+  { key: "2026-04-15", short: "Wed", date: "15", full: "Wednesday, April 15" },
+  { key: "2026-04-16", short: "Thu", date: "16", full: "Thursday, April 16" },
+  { key: "2026-04-17", short: "Fri", date: "17", full: "Friday, April 17" },
+];
+
+const conflictSVG = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 2v7"/><circle cx="8" cy="12.5" r="0.5" fill="currentColor" stroke="none"/><path d="M2.5 14h11L8 2.5 2.5 14z" stroke-width="1.5"/></svg>`;
+const checkSVG = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5L6.5 11.5L12.5 5"/></svg>`;
+
+function fmtTime(t) {
+  const [h, m] = t.split(':').map(Number);
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const hh = h > 12 ? h - 12 : h === 0 ? 12 : h;
+  return `${hh}:${String(m).padStart(2,'0')} ${ampm}`;
+}
+
+function getTimeBlock(t) {
+  const h = parseInt(t.split(':')[0]);
+  if (h < 12) return 'morning';
+  if (h < 14) return 'midday';
+  if (h < 17) return 'afternoon';
+  return 'evening';
+}
+
+const blockLabels = { morning: 'Morning', midday: 'Midday', afternoon: 'Afternoon', evening: 'Evening' };
+
+// Detect conflict days
+const conflictDays = new Set();
+EVENTS.forEach(e => { if (e.conflictGroup) conflictDays.add(e.day); });
+
+// Load done state
+let doneState = {};
+try { doneState = JSON.parse(localStorage.getItem('chi26-done') || '{}'); } catch(e) {}
+
+function saveDone() {
+  try { localStorage.setItem('chi26-done', JSON.stringify(doneState)); } catch(e) {}
+}
+
+function eventId(e) {
+  let h = 0;
+  const s = e.title + (e.day || '');
+  for (let i = 0; i < s.length; i++) { h = ((h << 5) - h + s.charCodeAt(i)) | 0; }
+  return 'ev' + Math.abs(h).toString(36);
+}
+
+function renderCard(e, idx) {
+  const id = eventId(e);
+  const isDone = doneState[id];
+  const isConflict = !!e.conflictGroup;
+  const timeStr = e.endTime === 'late'
+    ? `After ${fmtTime(e.time)}`
+    : `${fmtTime(e.time)} – ${fmtTime(e.endTime)}`;
+
+  return `
+    <div class="event-card ${isDone ? 'done' : ''} ${isConflict ? 'conflict' : ''}" data-type="${e.type}" data-id="${id}">
+      <button class="done-toggle" onclick="toggleDone('${id}', this)" aria-label="Mark as done">${checkSVG}</button>
+      <div class="conflict-badge">${conflictSVG} Scheduling conflict</div>
+      <div class="event-time">
+        <span class="event-type-tag">${e.type === 'organize' ? 'Organizing' : e.type}</span>
+        ${timeStr} CEST
+      </div>
+      <div class="event-title">${e.title}</div>
+      ${e.room || e.note ? `<div class="event-meta">${e.room ? `<span class="room">${e.room}</span>` : ''}${e.room && e.note ? ' · ' : ''}${e.note || ''}</div>` : ''}
+    </div>`;
+}
+
+function renderUnscheduledCard(e) {
+  const id = eventId(e);
+  const isDone = doneState[id];
+  return `
+    <div class="event-card ${isDone ? 'done' : ''}" data-type="${e.type}" data-id="${id}">
+      <button class="done-toggle" onclick="toggleDone('${id}', this)" aria-label="Mark as done">${checkSVG}</button>
+      <div class="event-time"><span class="event-type-tag">${e.type}</span> No time assigned</div>
+      <div class="event-title">${e.title}</div>
+      ${e.note ? `<div class="event-note">${e.note}</div>` : ''}
+      ${e.link ? `<a class="event-link" href="${e.link}" target="_blank" rel="noopener">▶ ${e.linkLabel || 'Link'}</a>` : ''}
+    </div>`;
+}
+
+function toggleDone(id, btn) {
+  doneState[id] = !doneState[id];
+  saveDone();
+  const card = btn.closest('.event-card');
+  card.classList.toggle('done', doneState[id]);
+}
+
+// Build tabs
+const tabsEl = document.getElementById('dayTabs');
+DAYS.forEach((d, i) => {
+  const hasConflict = conflictDays.has(d.key);
+  tabsEl.innerHTML += `
+    <button class="day-tab ${i === 0 ? 'active' : ''}" data-day="${d.key}" onclick="switchDay('${d.key}')">
+      <span class="tab-day">${d.short}</span>
+      <span class="tab-date">${d.date}${hasConflict ? '<span class="conflict-dot"></span>' : ''}</span>
+    </button>`;
+});
+
+// Build content
+const contentEl = document.getElementById('content');
+
+DAYS.forEach((d, i) => {
+  const dayEvents = EVENTS.filter(e => e.day === d.key).sort((a, b) => a.time.localeCompare(b.time));
+
+  let html = `<div class="day-section ${i === 0 ? 'active' : ''}" data-day="${d.key}">`;
+  html += `<div class="day-header">${d.short.replace(/.$/, d.short === 'Thu' ? 'rsday' : d.short === 'Tue' ? 'sday' : d.short === 'Wed' ? 'nesday' : d.short === 'Fri' ? 'day' : 'day')}</div>`;
+  html += `<div class="day-date-full">${d.full}, 2026</div>`;
+
+  if (dayEvents.length === 0) {
+    html += `<div class="empty-note">No events scheduled</div>`;
+  } else {
+    let currentBlock = '';
+    dayEvents.forEach((e, idx) => {
+      const block = getTimeBlock(e.time);
+      if (block !== currentBlock) {
+        currentBlock = block;
+        html += `<div class="time-block-label">${blockLabels[block]}</div>`;
+      }
+      html += renderCard(e, idx);
+    });
+  }
+
+  html += '</div>';
+  contentEl.innerHTML += html;
+});
+
+// Unscheduled section (show on all days = append to last day? No, add as separate)
+let unschedHtml = `<div class="day-section" data-day="unscheduled">
+  <div class="day-header">Unscheduled</div>
+  <div class="day-date-full">No assigned time slot</div>`;
+UNSCHEDULED.forEach(e => { unschedHtml += renderUnscheduledCard(e); });
+unschedHtml += '</div>';
+contentEl.innerHTML += unschedHtml;
+
+// Add unscheduled tab
+tabsEl.innerHTML += `
+  <button class="day-tab" data-day="unscheduled" onclick="switchDay('unscheduled')">
+    <span class="tab-day">Other</span>
+    <span class="tab-date">—</span>
+  </button>`;
+
+function switchDay(key) {
+  document.querySelectorAll('.day-tab').forEach(t => t.classList.toggle('active', t.dataset.day === key));
+  document.querySelectorAll('.day-section').forEach(s => s.classList.toggle('active', s.dataset.day === key));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Auto-select today's tab if applicable
+const today = new Date().toISOString().slice(0, 10);
+const matchDay = DAYS.find(d => d.key === today);
+if (matchDay) switchDay(matchDay.key);
+</script>
+
+</body>
+</html>
