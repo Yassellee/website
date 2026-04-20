@@ -128,8 +128,8 @@ const papers = [
   {
     "title": "How Well Can LLM Agents Simulate End-User Security and Privacy Attitudes and Behaviors?",
     "authors": "<span class=\"author-highlight\">Yuxuan Li*</span>, Leyang Li*, Hao-Ping (Hank) Lee, Sauvik Das",
-    "venue": "Under review at USENIX Security 2026",
-    "venue_short": "USENIX Security 2026 (Under Review)",
+    "venue": "Under review at CCS 2026",
+    "venue_short": "CCS 2026 (Under Review)",
     "visibility": "both",
     "image": "images/USENIX2026.png",
     "excerpt": "LLM agents are only moderately reliable proxies for user security and privacy behavior, yet. Using a new benchmark grounded in human-subject studies, we find that simulations achieve limited alignment (\u224850\u201364/100), with no consistent gains from larger or more advanced models, and strong dependence on persona design and prompting\u2014especially theory-informed prompts, which improve behavioral realism but can distort stated attitudes.",
