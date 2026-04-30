@@ -6,7 +6,7 @@ const papers = [
     "venue_short": "ICML 2026",
     "visibility": "both",
     "image": "images/2025-09-25-ICLR2026-submission-a.png",
-    "excerpt": "Multi-agent LLM systems fail at collective reasoning, much like human groups. We demonstrate this by formalizing the Hidden Profile paradigm from social psychology and constructing a scalable 65-task benchmark based on this formalization.",
+    "excerpt": "Multi-agent is everywhere today. But the core promise that many agents pool more information than one quietly breaks. Across 15 frontier LLMs, groups score 30% where a single agent with the same total info scores 81%. Scaling the group makes it worse.",
     "paper": "https://arxiv.org/abs/2505.11556",
     "cite": `@article{li2025assessing,
   title={Assessing Collective Reasoning in Multi-Agent LLMs via Hidden Profile Tasks},
