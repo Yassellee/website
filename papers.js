@@ -1,5 +1,21 @@
 const papers = [
   {
+    "title": "Systematic Failures in Collective Reasoning under Distributed Information in Multi-Agent LLMs",
+    "authors": "<span class=\"author-highlight\">Yuxuan Li</span>, Aoi Naito, Hirokazu Shirado",
+    "venue": "ICML 2026",
+    "venue_short": "ICML 2026",
+    "visibility": "both",
+    "image": "images/2025-09-25-ICLR2026-submission-a.png",
+    "excerpt": "Multi-agent LLM systems fail at collective reasoning, much like human groups. We demonstrate this by formalizing the Hidden Profile paradigm from social psychology and constructing a scalable 65-task benchmark based on this formalization.",
+    "paper": "https://arxiv.org/abs/2505.11556",
+    "cite": `@article{li2025assessing,
+  title={Assessing Collective Reasoning in Multi-Agent LLMs via Hidden Profile Tasks},
+  author={Li, Yuxuan and Naito, Aoi and Shirado, Hirokazu},
+  journal={arXiv preprint arXiv:2505.11556},
+  year={2025}
+}`
+  },
+  {
     "title": "Spontaneous Giving and Calculated Greed in Language Models",
     "authors": "<span class=\"author-highlight\">Yuxuan Li</span>, Hirokazu Shirado",
     "venue": "EMNLP 2025 Main | The 2025 Conference on Empirical Methods in Natural Language Processing",
@@ -96,22 +112,6 @@ const papers = [
   title={What Makes LLM Agent Simulations Useful for Policy? Insights From an Iterative Design Engagement in Emergency Preparedness},
   author={Li, Yuxuan and Das, Sauvik and Shirado, Hirokazu},
   journal={arXiv preprint arXiv:2509.21868},
-  year={2025}
-}`
-  },
-  {
-    "title": "Systematic Failures in Collective Reasoning under Distributed Information in Multi-Agent LLMs",
-    "authors": "<span class=\"author-highlight\">Yuxuan Li</span>, Aoi Naito, Hirokazu Shirado",
-    "venue": "Under review at ICML 2026",
-    "venue_short": "ICML 2026 (Under Review)",
-    "visibility": "both",
-    "image": "images/2025-09-25-ICLR2026-submission-a.png",
-    "excerpt": "Multi-agent LLM systems fail at collective reasoning, much like human groups. We demonstrate this by formalizing the Hidden Profile paradigm from social psychology and constructing a scalable 65-task benchmark based on this formalization.",
-    "paper": "https://arxiv.org/abs/2505.11556",
-    "cite": `@article{li2025assessing,
-  title={Assessing Collective Reasoning in Multi-Agent LLMs via Hidden Profile Tasks},
-  author={Li, Yuxuan and Naito, Aoi and Shirado, Hirokazu},
-  journal={arXiv preprint arXiv:2505.11556},
   year={2025}
 }`
   },
