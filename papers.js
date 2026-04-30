@@ -123,7 +123,13 @@ const papers = [
     "visibility": "both",
     "image": "images/UIST2026.png",
     "excerpt": "Interactive systems unlock the value of LLM simulations. We introduce WhatIf, a system that lets policymakers steer, inspect, and compare large-scale agent simulations in real time, turning them into shared reasoning environments that support iterative what-if exploration, collaborative deliberation, and multi-level interpretation of behavior from individual agents to crowd dynamics.",
-    "paper": "https://drive.google.com/file/d/17Xng8ZNKNPlhlae99rhj7hjKg65VPXoK/view"
+    "paper": "https://arxiv.org/abs/2604.17615",
+    "cite": `@article{li2026whatif,
+  title={WhatIf: Interactive Exploration of LLM-Powered Social Simulations for Policy Reasoning},
+  author={Li, Yuxuan and Monteiro, Kyzyl and Shirado, Hirokazu and Das, Sauvik},
+  journal={arXiv preprint arXiv:2604.17615},
+  year={2026}
+}`
   },
   {
     "title": "How Well Can LLM Agents Simulate End-User Security and Privacy Attitudes and Behaviors?",
