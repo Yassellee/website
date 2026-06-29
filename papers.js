@@ -118,8 +118,8 @@ const papers = [
   {
     "title": "WhatIf: Interactive Exploration of LLM-Powered Social Simulations for Policy Reasoning",
     "authors": "<span class=\"author-highlight\">Yuxuan Li</span>, Kyzyl Monteiro, Hirokazu Shirado, Sauvik Das",
-    "venue": "Under review at UIST 2026",
-    "venue_short": "UIST 2026 (Under Review)",
+    "venue": "Conditionally accepted at UIST 2026",
+    "venue_short": "Conditionally Accepted at UIST 2026",
     "visibility": "both",
     "image": "images/UIST2026.png",
     "excerpt": "Interactive systems unlock the value of LLM simulations. We introduce WhatIf, a system that lets policymakers steer, inspect, and compare large-scale agent simulations in real time, turning them into shared reasoning environments that support iterative what-if exploration, collaborative deliberation, and multi-level interpretation of behavior from individual agents to crowd dynamics.",
