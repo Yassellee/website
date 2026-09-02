@@ -85,18 +85,24 @@ img {
   color: #4a5568;
 }
 
+/* The three verbs read as part of the sentence; a dotted rule marks them
+   as expandable, and the open one switches to a solid rule. */
 .research-trigger {
   appearance: none;
   border: 0;
-  border-bottom: 1px solid currentColor;
   background: transparent;
   color: #2b6cb0;
   cursor: pointer;
   font: inherit;
-  font-weight: 600;
   line-height: inherit;
-  padding: 0 1px;
-  transition: color 0.2s ease, background-color 0.2s ease;
+  padding: 0;
+  margin: 0;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: rgba(43, 108, 176, 0.55);
+  text-underline-offset: 4px;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
 }
 
 .research-statement,
@@ -104,10 +110,15 @@ img {
   font-weight: 700;
 }
 
-.research-trigger:hover,
-.research-trigger[aria-expanded="true"] {
+.research-trigger:hover {
   color: #1a4971;
-  background-color: #ebf4ff;
+  text-decoration-color: #1a4971;
+}
+
+.research-trigger[aria-expanded="true"] {
+  color: #1a202c;
+  text-decoration-style: solid;
+  text-decoration-color: #1a202c;
 }
 
 .research-trigger:focus-visible {
@@ -120,71 +131,71 @@ img {
   margin: 0 0 14px 0;
 }
 
+/* Panel: no box, just two hairlines. The lead sentence runs full width and
+   the projects fill a two-column index beneath it. */
 .research-panel {
-  position: relative;
-  padding: 16px 18px;
-  background: linear-gradient(135deg, #f7fafc 0%, #edf6ff 100%);
-  border: 1px solid #dbeafe;
-  border-left: 3px solid #2b6cb0;
-  border-radius: 0 9px 9px 0;
-  box-shadow: 0 5px 16px rgba(43, 108, 176, 0.08);
-  animation: slideDown 0.22s ease-out;
+  padding: 12px 0 4px;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  animation: fadeIn 0.18s ease-out;
 }
 
 .research-panel[hidden] {
   display: none;
 }
 
-.research-panel h2 {
-  margin: 0 0 3px 0;
-  color: #1a202c;
-  font-size: 16px;
-  line-height: 1.4;
+.profile-text .research-lead {
+  margin: 0 0 6px 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #4a5568;
 }
 
-.profile-text .research-panel > p {
-  margin-bottom: 11px;
-  font-size: 13.5px;
-  color: #64748b;
+.research-lead-term {
+  display: inline-block;
+  margin-right: 10px;
+  font-weight: 600;
+  color: #1a202c;
 }
 
 .research-projects {
   list-style: none;
   margin: 0;
   padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 32px;
 }
 
 .research-projects li {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 14px;
-  align-items: baseline;
-  padding: 6px 0;
-  border-top: 1px solid rgba(190, 227, 248, 0.75);
-  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  padding: 8px 0;
+  border-top: 1px solid #edf2f7;
+  font-size: 13.5px;
   line-height: 1.4;
 }
 
 .research-projects li > :first-child {
-  min-width: 0;
   font-weight: 500;
+  color: #2d3748;
 }
 
-.research-projects li > span:last-child {
-  color: #718096;
-  font-size: 11.5px;
-  font-weight: 600;
-  letter-spacing: 0.15px;
-  white-space: nowrap;
+.research-projects a {
+  color: #2d3748;
 }
 
 .research-projects a:hover {
-  text-decoration-thickness: 1px;
-  text-underline-offset: 2px;
+  color: #2b6cb0;
+  text-decoration: none;
 }
 
-.project-title {
-  color: #334155;
+.project-venue {
+  font-size: 12px;
+  color: #a0aec0;
+  font-variant-numeric: tabular-nums;
 }
 
 .profile-photo {
@@ -252,62 +263,123 @@ img {
   color: #7b341e;
 }
 
-/* Bio Media Coverage */
+/* ============================================
+   Coverage index (shared by bio + paper press panels)
+   A label column on the left, entries on the right, hairlines between.
+   ============================================ */
+
 .media-coverage-toggle {
   cursor: pointer;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: rgba(43, 108, 176, 0.55);
+  text-underline-offset: 4px;
+}
+
+.media-coverage-toggle:hover {
+  text-decoration-style: dotted;
+  text-decoration-color: #1a4971;
+}
+
+.media-coverage-toggle.is-open {
+  color: #1a202c;
+  text-decoration-style: solid;
+  text-decoration-color: #1a202c;
 }
 
 .bio-media-coverage {
-  margin-top: 16px;
-  padding: 18px 20px;
-  background-color: #f7fafc;
-  border-left: 3px solid #2b6cb0;
-  border-radius: 0 8px 8px 0;
-  animation: slideDown 0.3s ease-out;
+  margin: 4px 0 16px;
+  border-bottom: 1px solid #e2e8f0;
+  animation: fadeIn 0.18s ease-out;
 }
 
-.bio-media-category {
-  margin-bottom: 16px;
+.bio-media-coverage[hidden] {
+  display: none;
 }
 
-.bio-media-category:last-child {
-  margin-bottom: 0;
+.profile-text .coverage-intro {
+  margin: 0 0 6px 0;
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #4a5568;
 }
 
-.bio-media-category h4 {
-  margin: 0 0 8px 0;
+.coverage-row {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  column-gap: 24px;
+  padding: 9px 0;
+  border-top: 1px solid #edf2f7;
+}
+
+.coverage-row:first-child {
+  border-top-color: #e2e8f0;
+}
+
+.coverage-label {
+  padding-top: 2px;
   font-size: 12px;
   font-weight: 600;
-  color: #718096;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  line-height: 1.5;
+  color: #a0aec0;
 }
 
-.bio-media-category ul {
+.coverage-list {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.bio-media-category ul li {
+.coverage-list li {
   font-size: 13.5px;
+  line-height: 1.5;
   color: #4a5568;
-  padding: 3px 0;
-  line-height: 1.45;
+  padding: 2px 0;
 }
 
-.bio-media-category ul li a {
+.coverage-list a {
+  color: #2d3748;
   font-weight: 500;
 }
 
-.bio-media-compact {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 16px;
+.coverage-list a:hover {
+  color: #2b6cb0;
+  text-decoration: none;
 }
 
-.bio-media-compact li {
-  width: auto;
+.coverage-outlet {
+  color: #a0aec0;
+  font-size: 12.5px;
+}
+
+.coverage-outlet::before {
+  content: "\00a0\00a0";
+}
+
+/* Compact variant: outlets as running text separated by middots. */
+.coverage-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 6px;
+}
+
+.coverage-inline li {
+  padding: 0;
+  min-width: 0;
+}
+
+.coverage-inline a {
+  font-weight: 400;
+  color: #4a5568;
+}
+
+.coverage-inline li:not(:last-child)::after {
+  content: "·";
+  margin-left: 6px;
+  color: #cbd5e0;
 }
 
 /* ============================================
@@ -461,10 +533,13 @@ img {
   border-radius: 4px;
 }
 
+/* Paper links: quiet text links. External links first, then a thin
+   divider, then the in-place toggles marked with a small chevron. */
 .paper-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  align-items: center;
+  gap: 4px 16px;
   margin: 10px 0 0 0;
   font-size: 13px;
 }
@@ -472,131 +547,134 @@ img {
 .paper-links a {
   font-weight: 500;
   color: #4a5568;
-  border: 1px solid #e2e8f0;
-  padding: 2px 10px;
-  border-radius: 4px;
-  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
   text-decoration: none;
+  transition: color 0.15s ease;
 }
 
 .paper-links a:hover {
   color: #2b6cb0;
-  border-color: #bee3f8;
-  background-color: #ebf4ff;
   text-decoration: none;
 }
 
-.paper-links a:not(:last-child)::after {
-  content: none;
+.paper-links-sep {
+  width: 1px;
+  height: 12px;
+  background: #e2e8f0;
 }
 
-.paper-excerpt {
-  font-size: 14px;
-  color: #4a5568;
-  margin: 14px 0 0 0;
-  line-height: 1.6;
-  display: none;
-  animation: slideDown 0.3s ease-out;
-}
-
-.paper-excerpt.open {
-  display: block;
-}
-
-/* Media Coverage Box */
-.media-coverage {
-  margin-top: 14px;
-  padding: 14px 16px;
-  background-color: #f7fafc;
-  border-left: 3px solid #2b6cb0;
-  border-radius: 0 8px 8px 0;
-  animation: slideDown 0.3s ease-out;
-}
-
-.media-coverage h4 {
-  margin: 0 0 10px 0;
-  font-size: 13px;
-  font-weight: 600;
-  color: #2b6cb0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.media-list {
-  margin: 0;
+.paper-toggle {
+  appearance: none;
+  border: 0;
+  background: transparent;
   padding: 0;
-  list-style: none;
+  margin: 0;
+  font: inherit;
+  font-weight: 500;
+  color: #718096;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: color 0.15s ease;
 }
 
-.media-list li {
-  margin-bottom: 6px;
-  padding: 4px 0;
-  border-bottom: 1px solid #edf2f7;
+.paper-toggle::after {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-1.5px) rotate(45deg);
+  opacity: 0.7;
+  transition: transform 0.15s ease;
+}
+
+.paper-toggle:hover {
+  color: #2b6cb0;
+}
+
+.paper-toggle[aria-expanded="true"] {
+  color: #1a202c;
+}
+
+.paper-toggle[aria-expanded="true"]::after {
+  transform: translateY(1.5px) rotate(-135deg);
+}
+
+.paper-toggle:focus-visible {
+  outline: 2px solid #63b3ed;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Expanded panels under a paper */
+.paper-panel {
+  margin-top: 14px;
+  animation: fadeIn 0.18s ease-out;
+}
+
+.paper-panel[hidden] {
+  display: none;
+}
+
+.paper-excerpt p {
+  margin: 0;
+  padding-left: 14px;
+  border-left: 2px solid #e2e8f0;
   font-size: 14px;
+  line-height: 1.65;
   color: #4a5568;
 }
 
-.media-list li:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
+.paper-panel .coverage-row:first-child {
+  border-top-color: #edf2f7;
 }
 
-.media-list a {
-  font-weight: 500;
-}
-
-/* Citation Box */
-.citation-box {
-  margin-top: 14px;
-  padding: 14px 16px;
-  background-color: #f7fafc;
-  border-left: 3px solid #2b6cb0;
-  border-radius: 0 8px 8px 0;
-  animation: slideDown 0.3s ease-out;
-}
-
-.citation-box h4 {
-  margin: 0 0 10px 0;
-  font-size: 13px;
-  font-weight: 600;
-  color: #2b6cb0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+/* BibTeX: a light code block with a quiet copy button in its corner. */
+.cite-panel {
+  position: relative;
 }
 
 .bibtex-code {
-  background-color: #1a202c;
-  color: #e2e8f0;
-  padding: 14px 16px;
+  margin: 0;
+  padding: 12px 88px 12px 14px;
+  background-color: #f8fafc;
+  border: 1px solid #e8edf3;
   border-radius: 6px;
+  color: #2d3748;
   font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   font-size: 12px;
-  line-height: 1.5;
-  margin: 0 0 10px 0;
+  line-height: 1.55;
   overflow-x: auto;
   white-space: pre-wrap;
   word-wrap: break-word;
 }
 
 .copy-btn {
-  background-color: #2b6cb0;
-  color: #fff;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 6px;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: #fff;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+  padding: 3px 9px;
+  border-radius: 4px;
   cursor: pointer;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   font-family: inherit;
-  transition: background-color 0.2s ease;
+  line-height: 1.4;
+  transition: color 0.15s ease, border-color 0.15s ease;
 }
 
 .copy-btn:hover {
-  background-color: #1a4971;
+  color: #1a202c;
+  border-color: #cbd5e0;
 }
 
 .copy-btn.copied {
-  background-color: #718096;
+  color: #2b6cb0;
+  border-color: #bee3f8;
 }
 
 /* ============================================
@@ -764,15 +842,9 @@ footer a:hover {
    Animations
    ============================================ */
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* ============================================
@@ -854,13 +926,18 @@ footer a:hover {
     margin-right: 24px;
   }
 
-  .research-projects li {
+  .research-projects {
     grid-template-columns: 1fr;
-    gap: 2px;
   }
 
-  .research-projects li > span:last-child {
-    white-space: normal;
+  .coverage-row {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 4px;
+  }
+
+  .bibtex-code {
+    padding-right: 14px;
+    padding-top: 36px;
   }
 
   .talk-venue {
