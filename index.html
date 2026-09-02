@@ -33,31 +33,52 @@
     <section class="profile">
       <div class="profile-text">
         <h1>Yuxuan Li <span class="name-cn">李宇轩</span></h1>
-        <p>I'm a second-year PhD student in the <a href="https://hcii.cmu.edu/" target="_blank">Human-Computer Interaction Institute (HCII)</a> within <a href="https://www.cmu.edu/" target="_blank">Carnegie Mellon University (CMU)</a>'s <a href="https://www.cs.cmu.edu/" target="_blank">School of Computer Science</a>, advised by <a href="https://www.shirado.net/" target="_blank">Hirokazu Shirado</a> and <a href="https://sauvikdas.com/" target="_blank">Sauvik Das</a>.</p>
-        <p>
-          Humans are increasingly delegating agency to AI. We are heading toward a future in which personal agents act on our behalf in social settings, creating a society of agents. I study how to build <b>socially intelligent AI agents</b> for that future&mdash;and how agent societies today can help us understand and improve human society.
+        <p class="research-intro">
+          Humans are increasingly letting AI make decisions on their behalf. My research asks how we can
+          <button type="button" class="research-trigger" aria-expanded="false" aria-controls="research-evaluate" data-research="evaluate">evaluate</button>,
+          <button type="button" class="research-trigger" aria-expanded="false" aria-controls="research-improve" data-research="improve">improve</button>, and
+          <button type="button" class="research-trigger" aria-expanded="false" aria-controls="research-integrate" data-research="integrate">integrate</button>
+          AI agents for consequential decision making. I study AI agents both when they make decisions and when their simulated behavior informs human decisions.
         </p>
-        <div class="research-tracks">
-          <div class="research-track">
-            <div class="track-header"><span class="track-label">Build for an agent-native future:</span> Evaluating and improving the social intelligence of AI agents</div>
-            <div class="track-papers">
-              <a href="https://arxiv.org/abs/2505.11556" target="_blank">ICML'26</a>
-              <a href="https://aclanthology.org/2025.emnlp-main.267/" target="_blank">EMNLP'25 Oral</a>
-              <a href="https://dl.acm.org/doi/full/10.1145/3715275.3732212" target="_blank">FAccT'25</a>
-            </div>
-          </div>
-          <div class="research-track">
-            <div class="track-header"><span class="track-label">Use that future today:</span> Using multi-agent simulations to model social dynamics and inform real-world practice</div>
-            <div class="track-papers">
-              <a href="https://arxiv.org/abs/2604.17615" target="_blank">UIST'26 Conditional Acceptance</a>
-              <a href="https://polisim.net/" target="_blank">PoliSim@CHI'26</a>
-              <a href="https://arxiv.org/abs/2509.21868" target="_blank">TOCHI Submission</a>
-              <a href="https://arxiv.org/abs/2602.18464" target="_blank">CCS'26 Submission</a>
-            </div>
-          </div>
+
+        <div class="research-details" aria-live="polite">
+          <section id="research-evaluate" class="research-panel" data-research-panel="evaluate" hidden>
+            <h2>Evaluate</h2>
+            <p>I build benchmarks and evaluation methods to test AI agents in consequential decision-making.</p>
+            <ul class="research-projects">
+              <li><a href="https://openreview.net/forum?id=igHBKQaLLP" target="_blank" rel="noopener">HiddenBench</a><span>ICML'26</span></li>
+              <li><a href="https://dl.acm.org/doi/full/10.1145/3715275.3732212" target="_blank" rel="noopener">Actions Speak Louder than Words</a><span>FAccT'25</span></li>
+              <li><a href="https://aclanthology.org/2025.emnlp-main.267/" target="_blank" rel="noopener">Spontaneous Giving, Calculated Greed</a><span>EMNLP'25</span></li>
+              <li><a href="https://arxiv.org/abs/2602.18464" target="_blank" rel="noopener">SP-ABCBench</a><span>NAACL'27 Under Review</span></li>
+              <li><span class="project-title">CAVEAT</span><span>ICLR'27 Under Review</span></li>
+              <li><span class="project-title">Physically Grounded LLM Agent Simulation</span><span>Ongoing</span></li>
+            </ul>
+          </section>
+
+          <section id="research-improve" class="research-panel" data-research-panel="improve" hidden>
+            <h2>Improve</h2>
+            <p>I train models and develop agent architectures and reasoning processes to make consequential decisions more robust.</p>
+            <ul class="research-projects">
+              <li><span class="project-title">CAVEAT-Harness + CAVEAT-27B</span><span>ICLR'27 Under Review</span></li>
+              <li><span class="project-title">Self-Evolving Agents for Collective Decision-Making</span><span>Ongoing</span></li>
+              <li><a href="https://arxiv.org/abs/2602.18464" target="_blank" rel="noopener">SP-ABCBench Theory-Informed Agent Simulation</a><span>NAACL'27 Under Review</span></li>
+            </ul>
+          </section>
+
+          <section id="research-integrate" class="research-panel" data-research-panel="integrate" hidden>
+            <h2>Integrate</h2>
+            <p>I design systems, interfaces, and decision processes for integrating AI agents into human and institutional decision-making.</p>
+            <ul class="research-projects">
+              <li><a href="https://arxiv.org/abs/2604.17615" target="_blank" rel="noopener">WhatIf: Interactive Large-Scale Agent Simulation</a><span>UIST'26</span></li>
+              <li><a href="https://polisim.net/" target="_blank" rel="noopener">LLM Agent Simulations for Policy</a><span>PoliSim@CHI'26</span></li>
+              <li><a href="https://arxiv.org/abs/2509.21868" target="_blank" rel="noopener">Recursive Modeling</a><span>CHI'27 Under Review</span></li>
+              <li><span class="project-title">Scalable Human Oversight for Collective Agent Decisions</span><span>Ongoing</span></li>
+            </ul>
+          </section>
         </div>
+
         <p>
-          I hold a BS in Computer Science from <a href="https://www.tsinghua.edu.cn/en/" target="_blank">Tsinghua University</a>, advised by <a href="https://www.cs.tsinghua.edu.cn/csen/info/1307/4341.htm" target="_blank">Chun Yu</a> and <a href="https://www.cs.tsinghua.edu.cn/csen/info/1306/4332.htm" target="_blank">Yuanchun Shi</a>. I was also a research intern at <a href="https://www.berkeley.edu/" target="_blank">UC Berkeley</a>, advised by <a href="https://people.ischool.berkeley.edu/~coye/" target="_blank">Coye Cheshire</a>. My research has received <a href="#" id="mediaCoverageToggle" class="media-coverage-toggle">extensive media coverage</a> and led to invited talks at institutions such as CMU, Georgia Tech, Tsinghua, HKU and Microsoft.
+          I am a PhD student in the <a href="https://hcii.cmu.edu/" target="_blank">Human-Computer Interaction Institute (HCII)</a> at <a href="https://www.cs.cmu.edu/" target="_blank">Carnegie Mellon University’s School of Computer Science</a>, advised by <a href="https://www.shirado.net/" target="_blank">Hirokazu Shirado</a> and <a href="https://sauvikdas.com/" target="_blank">Sauvik Das</a>. During my PhD, I have also worked as a research intern at <a href="https://www.microsoft.com/en-us/research/lab/ai-frontiers/" target="_blank">Microsoft Research AI Frontiers</a> (now part of <a href="https://microsoft.ai/" target="_blank">Microsoft AI</a>). I received my BS in Computer Science from <a href="https://www.tsinghua.edu.cn/en/" target="_blank">Tsinghua University</a>, where I was a member of the Pervasive HCI Group. I was also a research intern at <a href="https://www.berkeley.edu/" target="_blank">UC Berkeley</a>, working with <a href="https://bair.berkeley.edu/" target="_blank">Berkeley AI Research (BAIR)</a> and the <a href="https://www.ischool.berkeley.edu/" target="_blank">School of Information</a>. My work has been published at leading venues in machine learning, natural language processing, and human-computer interaction, including ICML, EMNLP, UIST, and FAccT. My research has received <a href="#" id="mediaCoverageToggle" class="media-coverage-toggle">extensive media coverage</a> and has led to invited talks at institutions including CMU, Georgia Tech, Tsinghua, KAIST, HKU, and Microsoft.
         </p>
 
         <div id="bioMediaCoverage" class="bio-media-coverage" style="display: none;">
@@ -133,9 +154,7 @@
           <a href="https://scholar.google.com/citations?user=Z02PYwcAAAAJ&hl=en" target="_blank"><svg class="social-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6l7-4 7 4-7 4-7-4z"/><path d="M3.5 7.5v4c0 1.5 2 2.5 4.5 2.5s4.5-1 4.5-2.5v-4"/></svg>Google Scholar</a>
           <a href="https://www.linkedin.com/in/yuxuan-li-cmuhcii/" target="_blank"><svg class="social-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="1.5" width="13" height="13" rx="2"/><line x1="5.5" y1="7" x2="5.5" y2="11.5"/><line x1="5.5" y1="4.5" x2="5.5" y2="4.5" stroke-width="2"/><path d="M8.5 11.5V9c0-1.5 1-2 2-2s1.5.5 1.5 2v2.5"/><line x1="8.5" y1="7" x2="8.5" y2="11.5"/></svg>LinkedIn</a>
           <a href="https://x.com/YuxuanL_" target="_blank"><svg class="social-icon" viewBox="0 0 16 16" fill="currentColor" stroke="none"><path d="M9.3 6.7L14.5 1h-1.2L8.8 6l-3.5-5H1.5l5.4 7.8L1.5 15h1.2l4.7-5.5 3.8 5.5h3.8L9.3 6.7zm-1.7 1.9l-.5-.8L3.3 2.2h1.9l3.5 5 .5.8 4.5 6.4h-1.9L7.6 8.6z"/></svg>X (formerly Twitter)</a>
-          <a href="https://bsky.app/profile/yuxuanli1225.bsky.social" target="_blank"><svg class="social-icon" viewBox="0 0 16 16" fill="currentColor" stroke="none"><path d="M3.5 2.5C5.3 4 7 6.2 8 7.5c1-1.3 2.7-3.5 4.5-5C13.7 1.5 15 .8 15 2.5c0 .4-.2 3-.4 3.5-.5 1.5-2.5 1.8-4.3 1.5 3.2.5 4 2.3 2.2 4-3.2 3.2-4.6-1-5-2.2-.1-.2-.1-.3-.1-.3v.1s0 .1-.1.3c-.4 1.2-1.8 5.3-5 2.2C.5 9.8 1.3 8 4.5 7.5c-1.8.3-3.8 0-4.3-1.5C0 5.5 0 2.9 0 2.5 0 .8 1.3 1.5 2.5 2.5z"/></svg>Bluesky</a>
         </nav>
-        <p class="news-badge">I will be joining <a href="https://www.microsoft.com/en-us/research/lab/ai-frontiers/" target="_blank">Microsoft Research AI Frontiers</a> this summer as a Research Intern.</p>
       </div>
     </section>
 
@@ -150,9 +169,6 @@
             <span>Invited Talks</span>
           </button>
         </nav>
-      </div>
-      <div id="papersToggle" class="papers-toggle">
-        <a href="#" onclick="togglePapersView(); return false;" id="toggleLink" class="toggle-link">See all papers</a>
       </div>
       <div id="papersContainer" class="tab-content"></div>
       <div id="talksContainer" class="tab-content" style="display: none;"></div>
@@ -173,14 +189,12 @@
   </div>
 
   <script>
-    let currentView = 'selected';
     let currentTab = 'papers';
 
     function switchTab(tab) {
       currentTab = tab;
       const papersContainer = document.getElementById('papersContainer');
       const talksContainer = document.getElementById('talksContainer');
-      const papersToggle = document.getElementById('papersToggle');
       const tabs = document.querySelectorAll('.section-tab');
 
       tabs.forEach(t => t.classList.toggle('active', t.getAttribute('data-tab') === tab));
@@ -188,11 +202,9 @@
       if (tab === 'papers') {
         papersContainer.style.display = '';
         talksContainer.style.display = 'none';
-        papersToggle.style.display = '';
       } else {
         papersContainer.style.display = 'none';
         talksContainer.style.display = '';
-        papersToggle.style.display = 'none';
       }
     }
 
@@ -275,32 +287,27 @@
       bindEventHandlers();
     }
 
-    function togglePapersView() {
-      const sectionTitle = document.getElementById('sectionTitle');
-      const toggleLink = document.getElementById('toggleLink');
-      const paperCards = document.querySelectorAll('.paper-card');
+    function bindEventHandlers() {
+      // Research focus disclosures
+      document.querySelectorAll('.research-trigger').forEach(trigger => {
+        trigger.addEventListener('click', () => {
+          const target = trigger.getAttribute('data-research');
+          const isOpen = trigger.getAttribute('aria-expanded') === 'true';
 
-      if (currentView === 'selected') {
-        currentView = 'all';
-        sectionTitle.textContent = 'All Papers';
-        toggleLink.textContent = 'See selected';
-        paperCards.forEach(card => card.classList.remove('hidden'));
-      } else {
-        currentView = 'selected';
-        sectionTitle.textContent = 'Selected Papers';
-        toggleLink.textContent = 'See all papers';
-        paperCards.forEach(card => {
-          const visibility = card.getAttribute('data-visibility');
-          if (visibility === 'selected' || visibility === 'both') {
-            card.classList.remove('hidden');
-          } else {
-            card.classList.add('hidden');
+          document.querySelectorAll('.research-trigger').forEach(button => {
+            button.setAttribute('aria-expanded', 'false');
+          });
+          document.querySelectorAll('.research-panel').forEach(panel => {
+            panel.hidden = true;
+          });
+
+          if (!isOpen) {
+            trigger.setAttribute('aria-expanded', 'true');
+            document.querySelector(`[data-research-panel="${target}"]`).hidden = false;
           }
         });
-      }
-    }
+      });
 
-    function bindEventHandlers() {
       // Email copy handler
       const emailLink = document.getElementById('emailLink');
       if (emailLink) {
