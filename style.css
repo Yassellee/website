@@ -687,7 +687,13 @@ button {
   position: relative;
   align-self: stretch;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Joint affiliations: two linked coins on the same stop. */
+.track-node + .track-node {
+  margin-top: -7px;
 }
 
 .track-rail::before {
@@ -733,6 +739,11 @@ button {
   object-fit: contain;
 }
 
+.track-node img.is-wordmark {
+  width: 27px;
+  height: auto;
+}
+
 .track-body {
   padding-top: 8px;
   min-width: 0;
@@ -746,20 +757,10 @@ button {
   color: var(--ink);
 }
 
-.track-org-note {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
+.track-org-and {
+  margin: 0 0.35em;
   font-weight: 400;
-  color: var(--text-2);
-  vertical-align: baseline;
-}
-
-.track-org-logo {
-  height: 11px;
-  width: auto;
-  position: relative;
-  top: 0.5px;
+  color: var(--muted);
 }
 
 .track-org-note::before {
@@ -966,6 +967,15 @@ footer p {
   .track-node img {
     width: 20px;
     height: 20px;
+  }
+
+  .track-node img.is-wordmark {
+    width: 22px;
+    height: auto;
+  }
+
+  .track-node + .track-node {
+    margin-top: -6px;
   }
 
   .track-period {

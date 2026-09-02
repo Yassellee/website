@@ -482,19 +482,24 @@
 
     function renderBackground() {
       const container = document.getElementById('backgroundContainer');
-      const items = background.map(item => `
-        <li class="track-item${item.current ? ' is-current' : ''}">
+      const items = background.map(item => {
+        const orgs = item.orgs || [{ name: item.org, logo: item.logo }];
+        const nodes = orgs.map(o => `<span class="track-node"><img src="${o.logo}" alt="${o.name}"${o.wordmark ? ' class="is-wordmark"' : ''} /></span>`).join('');
+        const orgHtml = orgs.map(o => `<span class="track-org-name">${o.name}</span>`).join('<span class="track-org-and">and</span>');
+        return `
+        <li class="track-item${item.current ? ' is-current' : ''}${orgs.length > 1 ? ' is-joint' : ''}">
           <div class="track-period">
             <span class="track-dates">${item.period}</span>
             <span class="track-kind">${{ education: 'Education', industry: 'Industry Research', research: 'Academic Research' }[item.kind] || ''}</span>
           </div>
-          <div class="track-rail"><span class="track-node"><img src="${item.logo}" alt="${item.org}" /></span></div>
+          <div class="track-rail">${nodes}</div>
           <div class="track-body">
-            <h3 class="track-org">${item.org}${item.orgNote ? `<span class="track-org-note">${item.orgNote}${item.orgNoteLogo ? ` <img class="track-org-logo" src="${item.orgNoteLogo}" alt="${item.orgNoteLogoAlt || ''}" />` : ''}</span>` : ''}</h3>
+            <h3 class="track-org">${orgHtml}</h3>
             <p class="track-role">${item.role}</p>
             ${item.people ? `<p class="track-people">${item.people}</p>` : ''}
           </div>
-        </li>`).join('');
+        </li>`;
+      }).join('');
       container.innerHTML = `<ol class="track">${items}</ol>`;
     }
 

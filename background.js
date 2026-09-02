@@ -1,16 +1,16 @@
 // Education and industry experience, newest first.
 // kind: "education" | "industry" | "research"; current: true marks an ongoing position.
+// An entry has either org + logo, or orgs: [{ name, logo, wordmark? }] for joint affiliations.
 const background = [
   {
     kind: "industry",
     period: "May – Aug 2026",
-    org: "Microsoft Research AI Frontiers",
-    orgNote: "now part of",
-    orgNoteLogo: "materials/mai_wordmark.png",
-    orgNoteLogoAlt: "Microsoft AI",
+    orgs: [
+      { name: "Microsoft Research AI Frontiers", logo: "materials/msr_logo.svg" },
+      { name: "Microsoft AI", logo: "materials/mai_wordmark.png", wordmark: true }
+    ],
     role: "Research Intern",
-    people: "Mentor: Zachary Huang",
-    logo: "materials/msr_logo.svg"
+    people: "Mentor: Zachary Huang"
   },
   {
     kind: "education",
