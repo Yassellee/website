@@ -747,8 +747,19 @@ button {
 }
 
 .track-org-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-weight: 400;
-  color: var(--muted);
+  color: var(--text-2);
+  vertical-align: baseline;
+}
+
+.track-org-logo {
+  height: 11px;
+  width: auto;
+  position: relative;
+  top: 0.5px;
 }
 
 .track-org-note::before {
@@ -899,8 +910,15 @@ footer p {
     justify-content: center;
   }
 
+  .section-tabs {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 20px;
+  }
+
   .section-tab {
-    font-size: 18px;
+    font-size: 17px;
+    padding-bottom: 8px;
   }
 
   .research-projects {

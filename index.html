@@ -167,7 +167,7 @@
             <span>Invited Talks</span>
           </button>
           <button class="section-tab" data-tab="background" onclick="switchTab('background')">
-            <span>Education &amp; Experience</span>
+            <span>Education &amp; Industry Experience</span>
           </button>
         </nav>
       </div>
@@ -486,11 +486,11 @@
         <li class="track-item${item.current ? ' is-current' : ''}">
           <div class="track-period">
             <span class="track-dates">${item.period}</span>
-            <span class="track-kind">${{ education: 'Education', industry: 'Industry', research: 'Research' }[item.kind] || ''}</span>
+            <span class="track-kind">${{ education: 'Education', industry: 'Industry Research', research: 'Academic Research' }[item.kind] || ''}</span>
           </div>
           <div class="track-rail"><span class="track-node"><img src="${item.logo}" alt="${item.org}" /></span></div>
           <div class="track-body">
-            <h3 class="track-org">${item.org}${item.orgNote ? `<span class="track-org-note">${item.orgNote}</span>` : ''}</h3>
+            <h3 class="track-org">${item.org}${item.orgNote ? `<span class="track-org-note">${item.orgNote}${item.orgNoteLogo ? ` <img class="track-org-logo" src="${item.orgNoteLogo}" alt="${item.orgNoteLogoAlt || ''}" />` : ''}</span>` : ''}</h3>
             <p class="track-role">${item.role}</p>
             ${item.people ? `<p class="track-people">${item.people}</p>` : ''}
           </div>

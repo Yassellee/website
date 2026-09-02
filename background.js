@@ -5,7 +5,9 @@ const background = [
     kind: "industry",
     period: "May – Aug 2026",
     org: "Microsoft Research AI Frontiers",
-    orgNote: "now part of Microsoft AI",
+    orgNote: "now part of",
+    orgNoteLogo: "materials/mai_wordmark.png",
+    orgNoteLogoAlt: "Microsoft AI",
     role: "Research Intern",
     people: "Mentor: Zachary Huang",
     logo: "materials/msr_logo.svg"
