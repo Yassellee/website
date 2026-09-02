@@ -35,14 +35,14 @@
         <h1>Yuxuan Li <span class="name-cn">李宇轩</span></h1>
         <p class="research-intro">
           Humans are increasingly letting AI make decisions on their behalf. <strong class="research-statement">My research asks how we can
-          <button type="button" class="research-trigger" aria-expanded="false" aria-controls="research-evaluate" data-research="evaluate">evaluate</button>,
-          <button type="button" class="research-trigger" aria-expanded="false" aria-controls="research-improve" data-research="improve">improve</button>, and
-          <button type="button" class="research-trigger" aria-expanded="false" aria-controls="research-integrate" data-research="integrate">integrate</button>
+          <button type="button" class="research-trigger expander" aria-expanded="false" aria-controls="research-evaluate" data-research="evaluate">evaluate</button>,
+          <button type="button" class="research-trigger expander" aria-expanded="false" aria-controls="research-improve" data-research="improve">improve</button>, and
+          <button type="button" class="research-trigger expander" aria-expanded="false" aria-controls="research-integrate" data-research="integrate">integrate</button>
           AI agents for consequential decision making, whether they directly act as decision makers or simulate behavior to inform human decisions.</strong>
         </p>
 
         <div class="research-details" aria-live="polite">
-          <section id="research-evaluate" class="research-panel" data-research-panel="evaluate" hidden>
+          <section id="research-evaluate" class="research-panel panel" data-research-panel="evaluate" hidden>
             <p class="research-lead"><span class="research-lead-term">Evaluate</span>I build benchmarks and evaluation methods to test AI agents in consequential decision-making.</p>
             <ul class="research-projects">
               <li><a href="https://openreview.net/forum?id=igHBKQaLLP" target="_blank" rel="noopener">HiddenBench</a><span class="project-venue">ICML 2026</span></li>
@@ -54,7 +54,7 @@
             </ul>
           </section>
 
-          <section id="research-improve" class="research-panel" data-research-panel="improve" hidden>
+          <section id="research-improve" class="research-panel panel" data-research-panel="improve" hidden>
             <p class="research-lead"><span class="research-lead-term">Improve</span>I train models and develop agent architectures and reasoning processes to make consequential decisions more robust.</p>
             <ul class="research-projects">
               <li><span class="project-title">CAVEAT-Harness + CAVEAT-27B</span><span class="project-venue">ICLR 2027 · under review</span></li>
@@ -63,7 +63,7 @@
             </ul>
           </section>
 
-          <section id="research-integrate" class="research-panel" data-research-panel="integrate" hidden>
+          <section id="research-integrate" class="research-panel panel" data-research-panel="integrate" hidden>
             <p class="research-lead"><span class="research-lead-term">Integrate</span>I design systems, interfaces, and decision processes for integrating AI agents into human and institutional decision-making.</p>
             <ul class="research-projects">
               <li><a href="https://arxiv.org/abs/2604.17615" target="_blank" rel="noopener">WhatIf: Interactive Large-Scale Agent Simulation</a><span class="project-venue">UIST 2026</span></li>
@@ -75,11 +75,10 @@
         </div>
 
         <p>
-          I am a PhD student in the <a href="https://hcii.cmu.edu/" target="_blank">Human-Computer Interaction Institute (HCII)</a> at <a href="https://www.cs.cmu.edu/" target="_blank">Carnegie Mellon University’s School of Computer Science</a>, advised by <a href="https://www.shirado.net/" target="_blank">Hirokazu Shirado</a> and <a href="https://sauvikdas.com/" target="_blank">Sauvik Das</a>. During my PhD, I have worked as a research intern at <a href="https://www.microsoft.com/en-us/research/lab/ai-frontiers/" target="_blank">Microsoft Research AI Frontiers</a> (now part of <a href="https://microsoft.ai/" target="_blank">Microsoft AI</a>). I received my BS in Computer Science from <a href="https://www.tsinghua.edu.cn/en/" target="_blank">Tsinghua University</a>. During undergrad, I was also a research intern at <a href="https://www.berkeley.edu/" target="_blank">UC Berkeley</a>. My work has been published at leading venues including ICML, EMNLP, UIST, and FAccT, and received <a href="#" id="mediaCoverageToggle" class="media-coverage-toggle">extensive media coverage</a>. I have given invited talks at institutions worldwide, including CMU, Georgia Tech, Tsinghua, KAIST, HKU, and Microsoft.
+          I am a PhD student in the <a href="https://hcii.cmu.edu/" target="_blank">Human-Computer Interaction Institute (HCII)</a> at <a href="https://www.cs.cmu.edu/" target="_blank">Carnegie Mellon University’s School of Computer Science</a>, advised by <a href="https://www.shirado.net/" target="_blank">Hirokazu Shirado</a> and <a href="https://sauvikdas.com/" target="_blank">Sauvik Das</a>. During my PhD, I have worked as a research intern at <a href="https://www.microsoft.com/en-us/research/lab/ai-frontiers/" target="_blank">Microsoft Research AI Frontiers</a> (now part of <a href="https://microsoft.ai/" target="_blank">Microsoft AI</a>). I received my BS in Computer Science from <a href="https://www.tsinghua.edu.cn/en/" target="_blank">Tsinghua University</a>. During undergrad, I was also a research intern at <a href="https://www.berkeley.edu/" target="_blank">UC Berkeley</a>. My work has been published at leading venues including ICML, EMNLP, UIST, and FAccT, and received <button type="button" id="mediaCoverageToggle" class="expander" aria-expanded="false" aria-controls="bioMediaCoverage">extensive media coverage</button>. I have given invited talks at institutions worldwide, including CMU, Georgia Tech, Tsinghua, KAIST, HKU, and Microsoft.
         </p>
 
-        <div id="bioMediaCoverage" class="bio-media-coverage" hidden>
-          <p class="coverage-intro">Coverage of <a href="https://aclanthology.org/2025.emnlp-main.267/" target="_blank" rel="noopener">Spontaneous Giving and Calculated Greed in Language Models</a> (EMNLP 2025), which found that reasoning models cooperate less.</p>
+        <div id="bioMediaCoverage" class="bio-media-coverage panel" hidden>
           <div class="coverage-row">
             <div class="coverage-label">National &amp; international</div>
             <ul class="coverage-list">
@@ -224,19 +223,19 @@
         if (post.youtube) links.push(`<a href="${post.youtube}" target="_blank">YouTube</a>`);
         const toggles = [];
         if (post.excerpt) {
-          toggles.push(`<button type="button" class="paper-toggle" aria-expanded="false" aria-controls="excerpt-${i}" data-target="excerpt-${i}">TL;DR</button>`);
+          toggles.push(`<button type="button" class="paper-toggle expander" aria-expanded="false" aria-controls="excerpt-${i}" data-target="excerpt-${i}">TL;DR</button>`);
         }
         if (post.media && post.media.length > 0) {
-          toggles.push(`<button type="button" class="paper-toggle" aria-expanded="false" aria-controls="media-${i}" data-target="media-${i}">Press</button>`);
+          toggles.push(`<button type="button" class="paper-toggle expander" aria-expanded="false" aria-controls="media-${i}" data-target="media-${i}">Press</button>`);
         }
         if (post.cite) {
-          toggles.push(`<button type="button" class="paper-toggle" aria-expanded="false" aria-controls="cite-${i}" data-target="cite-${i}">BibTeX</button>`);
+          toggles.push(`<button type="button" class="paper-toggle expander" aria-expanded="false" aria-controls="cite-${i}" data-target="cite-${i}">BibTeX</button>`);
         }
         const linksHtml = links.join('') + (links.length && toggles.length ? '<span class="paper-links-sep" aria-hidden="true"></span>' : '') + toggles.join('');
 
         let excerptHtml = '';
         if (post.excerpt) {
-          excerptHtml = `<div id="excerpt-${i}" class="paper-panel paper-excerpt" hidden><p>${post.excerpt}</p></div>`;
+          excerptHtml = `<div id="excerpt-${i}" class="paper-panel paper-excerpt panel" hidden><p>${post.excerpt}</p></div>`;
         }
 
         let mediaHtml = '';
@@ -245,7 +244,7 @@
           const untitled = post.media.filter(m => !m.title);
           const titledItems = titled.map(m => `<li><a href="${m.url}" target="_blank" rel="noopener">${m.title}</a><span class="coverage-outlet">${m.outlet}</span></li>`).join('');
           const untitledItems = untitled.map(m => `<li><a href="${m.url}" target="_blank" rel="noopener">${m.outlet}</a></li>`).join('');
-          mediaHtml = `<div id="media-${i}" class="paper-panel" hidden>
+          mediaHtml = `<div id="media-${i}" class="paper-panel panel" hidden>
             ${titledItems ? `<div class="coverage-row"><div class="coverage-label">Selected</div><ul class="coverage-list">${titledItems}</ul></div>` : ''}
             ${untitledItems ? `<div class="coverage-row"><div class="coverage-label">Also in</div><ul class="coverage-list coverage-inline">${untitledItems}</ul></div>` : ''}
           </div>`;
@@ -253,7 +252,7 @@
 
         let citeHtml = '';
         if (post.cite) {
-          citeHtml = `<div id="cite-${i}" class="paper-panel cite-panel" hidden>
+          citeHtml = `<div id="cite-${i}" class="paper-panel cite-panel panel" hidden>
             <pre class="bibtex-code">${post.cite}</pre>
             <button type="button" onclick="copyBibtex('cite-${i}')" class="copy-btn">Copy</button>
           </div>`;
@@ -268,9 +267,9 @@
               <img src="${post.image}" alt="${post.title} thumbnail" class="paper-image" />
             </div>
             <div class="paper-content">
-              <div class="paper-badges">
-                ${post.venue_short ? `<span class="venue-badge">${post.venue_short}</span>` : ''}
-                ${post.highlight ? post.highlight.split('｜').map(h => `<span class="highlight-badge">${h.trim()}</span>`).join('') : ''}
+              <div class="paper-meta">
+                ${post.venue_short ? `<span class="paper-venue">${post.venue_short}</span>` : ''}
+                ${post.highlight ? post.highlight.split('｜').map(h => `<span class="paper-honour">${h.trim()}</span>`).join('') : ''}
               </div>
               <h3>${post.title}</h3>
               <p class="paper-authors">${authorsHtml}</p>
@@ -344,16 +343,11 @@
       // Bio media coverage toggle
       const mediaCoverageToggle = document.getElementById('mediaCoverageToggle');
       if (mediaCoverageToggle) {
-        mediaCoverageToggle.setAttribute('role', 'button');
-        mediaCoverageToggle.setAttribute('aria-expanded', 'false');
-        mediaCoverageToggle.setAttribute('aria-controls', 'bioMediaCoverage');
-        mediaCoverageToggle.addEventListener('click', event => {
-          event.preventDefault();
+        mediaCoverageToggle.addEventListener('click', () => {
           const panel = document.getElementById('bioMediaCoverage');
           const open = panel.hidden;
           panel.hidden = !open;
           mediaCoverageToggle.setAttribute('aria-expanded', String(open));
-          mediaCoverageToggle.classList.toggle('is-open', open);
         });
       }
 
