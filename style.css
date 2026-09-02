@@ -61,7 +61,7 @@ img {
 }
 
 .profile-text h1 {
-  font-size: 30px;
+  font-size: 34px;
   font-weight: 700;
   margin: 0 0 16px 0;
   color: #1a202c;
@@ -71,13 +71,13 @@ img {
 .name-cn {
   font-weight: 400;
   color: #718096;
-  font-size: 24px;
+  font-size: 27px;
 }
 
 .profile-text p {
   margin: 0 0 11px 0;
   color: #4a5568;
-  line-height: 1.55;
+  line-height: 1.65;
 }
 
 .research-intro {
@@ -97,6 +97,11 @@ img {
   line-height: inherit;
   padding: 0 1px;
   transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.research-statement,
+.research-statement .research-trigger {
+  font-weight: 700;
 }
 
 .research-trigger:hover,
@@ -812,7 +817,7 @@ footer a:hover {
   }
 
   .profile-text h1 {
-    font-size: 26px;
+    font-size: 28px;
   }
 
   .paper-card {
@@ -875,11 +880,11 @@ footer a:hover {
   }
 
   .profile-text h1 {
-    font-size: 22px;
+    font-size: 24px;
   }
 
   .name-cn {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .social-links {
