@@ -641,6 +641,136 @@ button {
 }
 
 /* ============================================
+   Education & experience track
+   Period on the left, a rail of logo nodes, the entry on the right.
+   ============================================ */
+
+.track {
+  list-style: none;
+  margin: 0;
+  padding: 16px 0 8px;
+}
+
+.track-item {
+  display: grid;
+  grid-template-columns: 124px 40px minmax(0, 1fr);
+  column-gap: 16px;
+  align-items: start;
+  padding-bottom: 28px;
+}
+
+.track-item:last-child {
+  padding-bottom: 12px;
+}
+
+.track-period {
+  display: flex;
+  flex-direction: column;
+  padding-top: 8px;
+  line-height: 1.5;
+}
+
+.track-dates {
+  font-size: 13.5px;
+  color: var(--text-2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.track-kind {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.track-rail {
+  position: relative;
+  align-self: stretch;
+  display: flex;
+  justify-content: center;
+}
+
+.track-rail::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: -28px;
+  left: 50%;
+  width: 1px;
+  background: var(--rule);
+}
+
+.track-item:first-child .track-rail::before {
+  top: 20px;
+}
+
+.track-item:last-child .track-rail::before {
+  bottom: auto;
+  height: 20px;
+}
+
+.track-node {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid var(--rule);
+}
+
+.track-item.is-current .track-node {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.12);
+}
+
+.track-node img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.track-body {
+  padding-top: 8px;
+  min-width: 0;
+}
+
+.track-org {
+  margin: 0 0 3px 0;
+  font-size: 15.5px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.track-org-note {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.track-org-note::before {
+  content: "\00a0·\00a0 ";
+  color: var(--faint);
+}
+
+.track-role {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+
+.track-people {
+  margin: 2px 0 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* ============================================
    Image modal
    ============================================ */
 
@@ -785,6 +915,54 @@ footer p {
   .bibtex-code {
     padding-right: 14px;
     padding-top: 36px;
+  }
+
+  .track-item {
+    grid-template-columns: 32px minmax(0, 1fr);
+    column-gap: 14px;
+    padding-bottom: 22px;
+  }
+
+  .track-rail {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .track-rail::before {
+    bottom: -22px;
+  }
+
+  .track-item:first-child .track-rail::before {
+    top: 16px;
+  }
+
+  .track-item:last-child .track-rail::before {
+    height: 16px;
+  }
+
+  .track-node {
+    width: 32px;
+    height: 32px;
+  }
+
+  .track-node img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .track-period {
+    grid-column: 2;
+    grid-row: 1;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
+    padding-top: 0;
+  }
+
+  .track-body {
+    grid-column: 2;
+    grid-row: 2;
+    padding-top: 2px;
   }
 
   .talk-venue {
