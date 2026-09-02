@@ -10,7 +10,7 @@ const background = [
       { name: "Microsoft AI", logo: "materials/mai_wordmark.png", wordmark: true }
     ],
     role: "Research Intern",
-    people: "Mentor: Zachary Huang"
+    people: "Mentors: Zachary Huang and Will Epperson"
   },
   {
     kind: "education",
