@@ -2,14 +2,13 @@ const talks = [
   {
     title: "CAVEAT: Towards Robust Computer-Use Agents in Incentive-Misaligned Environments",
     venues: [
-      { date: "Aug 2026", institution: "Microsoft Research", department: "AI Frontiers", logo: "materials/msr_logo.svg" },
       { date: "Jul 2026", institution: "Microsoft Research", department: "FATE Group and STAC Group", logo: "materials/msr_logo.svg" }
     ]
   },
   {
     title: "Evaluate, Improve, and Use AI Agents for Decision Making",
     venues: [
-      { date: "Jul 2026", institution: "KAIST School of Computing", department: "CSTL", logo: "materials/KAIST_logo.svg" }
+      { date: "Jul 2026", institution: "KAIST School of Computing", department: "Collaborative Social Technologies Lab (CSTL)", logo: "materials/KAIST_logo.svg" }
     ]
   },
   {
