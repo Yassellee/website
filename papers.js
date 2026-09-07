@@ -8,6 +8,7 @@ const papers = [
     "image": "images/UIST2026.png",
     "excerpt": "Interactive systems unlock the value of LLM simulations. We introduce WhatIf, a system that lets policymakers steer, inspect, and compare large-scale agent simulations in real time, turning them into shared reasoning environments that support iterative what-if exploration, collaborative deliberation, and multi-level interpretation of behavior from individual agents to crowd dynamics.",
     "paper": "https://arxiv.org/abs/2604.17615",
+    "video": "https://drive.google.com/file/d/153rSZgL7msj3z5g5o63egASQSYkE_Wqg/view?usp=sharing",
     "cite": `@article{li2026whatif,
   title={WhatIf: Interactive Exploration of LLM-Powered Social Simulations for Policy Reasoning},
   author={Li, Yuxuan and Monteiro, Kyzyl and Shirado, Hirokazu and Das, Sauvik},
@@ -23,12 +24,12 @@ const papers = [
     "visibility": "both",
     "image": "images/2025-09-25-ICLR2026-submission-a.png",
     "excerpt": "Multi-agent is everywhere today. But the core promise that many agents pool more information than one quietly breaks. Across 15 frontier LLMs, groups score 30% where a single agent with the same total info scores 81%. Scaling the group makes it worse.",
-    "paper": "https://arxiv.org/abs/2505.11556",
-    "cite": `@article{li2025assessing,
-  title={Assessing Collective Reasoning in Multi-Agent LLMs via Hidden Profile Tasks},
+    "paper": "https://icml.cc/virtual/2026/poster/62206",
+    "cite": `@inproceedings{li2026systematic,
+  title={Systematic Failures in Collective Reasoning under Distributed Information in Multi-Agent LLMs},
   author={Li, Yuxuan and Naito, Aoi and Shirado, Hirokazu},
-  journal={arXiv preprint arXiv:2505.11556},
-  year={2025}
+  booktitle={Forty-third International Conference on Machine Learning},
+  year={2026}
 }`
   },
   {
