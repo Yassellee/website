@@ -1,5 +1,21 @@
 const papers = [
   {
+    "title": "WhatIf: Interactive Exploration of LLM-Powered Social Simulations for Policy Reasoning",
+    "authors": "<span class=\"author-highlight\">Yuxuan Li</span>, Kyzyl Monteiro, Hirokazu Shirado, Sauvik Das",
+    "venue": "Conditionally accepted at UIST 2026",
+    "venue_short": "UIST 2026",
+    "visibility": "both",
+    "image": "images/UIST2026.png",
+    "excerpt": "Interactive systems unlock the value of LLM simulations. We introduce WhatIf, a system that lets policymakers steer, inspect, and compare large-scale agent simulations in real time, turning them into shared reasoning environments that support iterative what-if exploration, collaborative deliberation, and multi-level interpretation of behavior from individual agents to crowd dynamics.",
+    "paper": "https://arxiv.org/abs/2604.17615",
+    "cite": `@article{li2026whatif,
+  title={WhatIf: Interactive Exploration of LLM-Powered Social Simulations for Policy Reasoning},
+  author={Li, Yuxuan and Monteiro, Kyzyl and Shirado, Hirokazu and Das, Sauvik},
+  journal={arXiv preprint arXiv:2604.17615},
+  year={2026}
+}`
+  },
+  {
     "title": "Systematic Failures in Collective Reasoning under Distributed Information in Multi-Agent LLMs",
     "authors": "<span class=\"author-highlight\">Yuxuan Li</span>, Aoi Naito, Hirokazu Shirado",
     "venue": "ICML 2026",
@@ -99,22 +115,7 @@ const papers = [
   year={2025}
 }`
   },
-  {
-    "title": "WhatIf: Interactive Exploration of LLM-Powered Social Simulations for Policy Reasoning",
-    "authors": "<span class=\"author-highlight\">Yuxuan Li</span>, Kyzyl Monteiro, Hirokazu Shirado, Sauvik Das",
-    "venue": "Conditionally accepted at UIST 2026",
-    "venue_short": "UIST 2026",
-    "visibility": "both",
-    "image": "images/UIST2026.png",
-    "excerpt": "Interactive systems unlock the value of LLM simulations. We introduce WhatIf, a system that lets policymakers steer, inspect, and compare large-scale agent simulations in real time, turning them into shared reasoning environments that support iterative what-if exploration, collaborative deliberation, and multi-level interpretation of behavior from individual agents to crowd dynamics.",
-    "paper": "https://arxiv.org/abs/2604.17615",
-    "cite": `@article{li2026whatif,
-  title={WhatIf: Interactive Exploration of LLM-Powered Social Simulations for Policy Reasoning},
-  author={Li, Yuxuan and Monteiro, Kyzyl and Shirado, Hirokazu and Das, Sauvik},
-  journal={arXiv preprint arXiv:2604.17615},
-  year={2026}
-}`
-  },
+
   {
     "title": "What Makes LLM Agent Simulations Useful for Policy Practice? An Iterative Design Study in Emergency Preparedness",
     "authors": "<span class=\"author-highlight\">Yuxuan Li</span>, Sauvik Das, Hirokazu Shirado",
