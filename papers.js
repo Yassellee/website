@@ -120,7 +120,7 @@ const papers = [
   {
     "title": "What Makes LLM Agent Simulations Useful for Policy Practice? An Iterative Design Study in Emergency Preparedness",
     "authors": "<span class=\"author-highlight\">Yuxuan Li</span>, Sauvik Das, Hirokazu Shirado",
-    "venue": "Under review at CHI 2027",
+    "venue": "Preprint",
     "venue_short": "CHI 2027 Under Review",
     "visibility": "both",
     "image": "images/2025-09-26-CHI2026-submission-a.png",
@@ -136,7 +136,7 @@ const papers = [
   {
     "title": "How Well Can LLM Agents Simulate End-User Security and Privacy Attitudes and Behaviors?",
     "authors": "<span class=\"author-highlight\">Yuxuan Li*</span>, Leyang Li*, Hao-Ping (Hank) Lee, Sauvik Das",
-    "venue": "Under review at NAACL 2027",
+    "venue": "Preprint",
     "venue_short": "NAACL 2027 Under Review",
     "visibility": "both",
     "image": "images/USENIX2026.png",
