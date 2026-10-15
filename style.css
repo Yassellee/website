@@ -160,9 +160,9 @@ button {
 .profile-text p {
   margin: 0 0 14px 0;
   font-family: var(--serif);
-  font-size: 17px;
+  font-size: 16px;
   color: var(--text);
-  line-height: 1.7;
+  line-height: 1.75;
 }
 
 .research-intro {
@@ -918,7 +918,7 @@ footer p {
   }
 
   .profile-text p {
-    font-size: 16.5px;
+    font-size: 15.5px;
   }
 
   .paper-card {
