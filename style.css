@@ -20,7 +20,8 @@
   --accent-rule: rgba(43, 108, 176, 0.5);
   --warm: #9c4221;
   --focus: #63b3ed;
-  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --serif: 'Newsreader', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font: var(--serif);
   --mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 }
 
@@ -36,7 +37,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: var(--font);
-  font-size: 15px;
+  font-size: 16.5px;
   line-height: 1.7;
   color: var(--text);
   background-color: #fff;
@@ -138,24 +139,30 @@ button {
 }
 
 .profile-text h1 {
-  font-size: 34px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-family: var(--serif);
+  font-size: 42px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
   margin: 0 0 16px 0;
   color: var(--ink);
   line-height: 1.3;
 }
 
 .name-cn {
+  margin-left: 0.1em;
+  font-family: 'Ma Shan Zheng', 'Kaiti SC', 'STKaiti', 'KaiTi', serif;
   font-weight: 400;
   color: var(--muted);
-  font-size: 27px;
+  font-size: 34px;
+  letter-spacing: 0.06em;
 }
 
 .profile-text p {
-  margin: 0 0 11px 0;
-  color: var(--text-2);
-  line-height: 1.85;
+  margin: 0 0 14px 0;
+  font-family: var(--serif);
+  font-size: 18px;
+  color: var(--text);
+  line-height: 1.6;
 }
 
 .research-intro {
@@ -164,7 +171,12 @@ button {
 
 .research-statement,
 .research-statement .research-trigger {
-  font-weight: 700;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.research-statement .research-trigger {
+  color: var(--accent);
 }
 
 .research-details {
@@ -180,7 +192,8 @@ button {
 
 .profile-text .research-lead {
   margin: 0 0 6px 0;
-  font-size: 13.5px;
+  font-family: var(--font);
+  font-size: 15px;
   line-height: 1.6;
   color: var(--text-2);
 }
@@ -208,7 +221,7 @@ button {
   min-width: 0;
   padding: 8px 0;
   border-top: 1px solid var(--rule-soft);
-  font-size: 13.5px;
+  font-size: 15px;
   line-height: 1.4;
 }
 
@@ -221,7 +234,7 @@ button {
 }
 
 .project-venue {
-  font-size: 12.5px;
+  font-size: 14px;
   color: var(--ink);
   font-variant-numeric: tabular-nums;
 }
@@ -244,7 +257,8 @@ button {
   align-items: flex-start;
   gap: 4px;
   padding-top: 12px;
-  font-size: 14px;
+  font-family: var(--serif);
+  font-size: 17px;
 }
 
 .social-links a {
@@ -260,6 +274,13 @@ button {
   flex-shrink: 0;
   opacity: 0.65;
   transition: opacity 0.15s ease;
+}
+
+.social-links .social-icon {
+  width: 0.9em;
+  height: 0.9em;
+  align-self: baseline;
+  transform: translateY(0.21em);
 }
 
 .social-links a:hover .social-icon {
@@ -291,7 +312,7 @@ button {
 
 .coverage-label {
   padding-top: 2px;
-  font-size: 12px;
+  font-size: 13.5px;
   font-weight: 600;
   line-height: 1.5;
   color: var(--muted);
@@ -304,7 +325,7 @@ button {
 }
 
 .coverage-list li {
-  font-size: 13.5px;
+  font-size: 15px;
   line-height: 1.5;
   color: var(--text-2);
   padding: 2px 0;
@@ -316,7 +337,7 @@ button {
 
 .coverage-outlet {
   color: var(--muted);
-  font-size: 12.5px;
+  font-size: 14px;
 }
 
 .coverage-outlet::before {
@@ -366,8 +387,9 @@ button {
 .section-tab {
   background: none;
   border: none;
-  font-size: 21px;
-  font-weight: 600;
+  font-family: var(--serif);
+  font-size: 25px;
+  font-weight: 500;
   letter-spacing: -0.01em;
   color: var(--faint);
   padding: 0 0 12px 0;
@@ -444,7 +466,7 @@ button {
   align-items: baseline;
   gap: 2px 8px;
   margin-bottom: 6px;
-  font-size: 12.5px;
+  font-size: 14px;
   font-weight: 600;
   line-height: 1.5;
 }
@@ -465,15 +487,16 @@ button {
 }
 
 .paper-content h3 {
-  font-size: 15.5px;
-  font-weight: 700;
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 500;
   margin: 0 0 8px 0;
   line-height: 1.4;
   color: var(--ink);
 }
 
 .paper-authors {
-  font-size: 14px;
+  font-size: 15.5px;
   margin: 0 0 8px 0;
   color: var(--text-2);
   line-height: 1.5;
@@ -496,7 +519,7 @@ button {
   align-items: center;
   gap: 4px 16px;
   margin: 10px 0 0 0;
-  font-size: 13px;
+  font-size: 14.5px;
   font-weight: 500;
 }
 
@@ -514,7 +537,7 @@ button {
   margin: 0;
   padding-left: 14px;
   border-left: 2px solid var(--rule);
-  font-size: 14px;
+  font-size: 15.5px;
   line-height: 1.65;
   color: var(--text-2);
 }
@@ -552,7 +575,7 @@ button {
   padding: 3px 9px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13.5px;
   font-weight: 500;
   line-height: 1.4;
   transition: color 0.15s ease, border-color 0.15s ease;
@@ -582,8 +605,9 @@ button {
 }
 
 .talk-title {
-  font-size: 15.5px;
-  font-weight: 700;
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 500;
   margin: 0 0 6px 0;
   line-height: 1.4;
   color: var(--ink);
@@ -623,18 +647,18 @@ button {
 }
 
 .talk-institution {
-  font-size: 14px;
+  font-size: 15.5px;
   font-weight: 600;
   color: var(--ink);
 }
 
 .talk-dept {
-  font-size: 13px;
+  font-size: 14.5px;
   color: var(--muted);
 }
 
 .talk-date {
-  font-size: 12.5px;
+  font-size: 14px;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -671,14 +695,14 @@ button {
 }
 
 .track-dates {
-  font-size: 13.5px;
+  font-size: 15px;
   color: var(--text-2);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
 .track-kind {
-  font-size: 12px;
+  font-size: 13.5px;
   font-weight: 600;
   color: var(--muted);
 }
@@ -751,8 +775,9 @@ button {
 
 .track-org {
   margin: 0 0 3px 0;
-  font-size: 15.5px;
-  font-weight: 700;
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 500;
   line-height: 1.4;
   color: var(--ink);
 }
@@ -770,14 +795,14 @@ button {
 
 .track-role {
   margin: 0;
-  font-size: 14px;
+  font-size: 15.5px;
   line-height: 1.55;
   color: var(--text-2);
 }
 
 .track-people {
   margin: 2px 0 0 0;
-  font-size: 13px;
+  font-size: 14.5px;
   line-height: 1.5;
   color: var(--muted);
 }
@@ -835,7 +860,7 @@ footer {
 }
 
 footer p {
-  font-size: 13px;
+  font-size: 14.5px;
   color: var(--faint);
   margin: 0;
 }
@@ -890,7 +915,11 @@ footer p {
   }
 
   .profile-text h1 {
-    font-size: 28px;
+    font-size: 34px;
+  }
+
+  .profile-text p {
+    font-size: 17px;
   }
 
   .paper-card {
@@ -918,7 +947,7 @@ footer p {
   }
 
   .section-tab {
-    font-size: 17px;
+    font-size: 20px;
     padding-bottom: 8px;
   }
 
@@ -1013,14 +1042,51 @@ footer p {
   }
 
   .profile-text h1 {
-    font-size: 24px;
+    font-size: 30px;
   }
 
   .name-cn {
-    font-size: 20px;
+    font-size: 25px;
   }
 
   .social-links {
-    font-size: 13px;
+    font-size: 15.5px;
   }
+}
+
+/* ============================================
+   Inline organization logos (bio)
+   ============================================ */
+
+.org-link {
+  white-space: nowrap;
+}
+
+.org-logo {
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  margin-right: 0.3em;
+  object-fit: contain;
+  vertical-align: -0.28em;
+}
+
+/* The Microsoft Research mark carries a wordmark underneath; show only the squares. */
+.org-logo-msr {
+  width: 0.95em;
+  height: 0.95em;
+  object-fit: cover;
+  object-position: top;
+  vertical-align: -0.12em;
+}
+
+.org-logo-wordmark {
+  width: auto;
+  height: 0.8em;
+  vertical-align: -0.04em;
+}
+
+.profile-text p strong {
+  font-weight: 600;
+  color: var(--ink);
 }

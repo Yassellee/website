@@ -116,6 +116,22 @@ const papers = [
   year={2025}
 }`
   },
+  {
+    "title": "CAVEAT: Towards Robust Computer-Use Agents in Incentive-Misaligned Environments",
+    "authors": "<span class=\"author-highlight\">Yuxuan Li</span>, Will Epperson, Wesley Deng, Zezhou Huang",
+    "venue": "Preprint",
+    "venue_short": "Preprint",
+    "visibility": "both",
+    "image": "images/ICLR2027.png",
+    "excerpt": "Computer-use agents are easily steered against their users in incentive-misaligned environments, but both harness design and post-training can make them more robust. In 9 high-fidelity marketplace environments that nudge agents toward favored products, agents buy the user-optimal product only 17.3% of the time, down from 78.6% without steering. Our CAVEAT-Harness raises this by up to 80 percentage points, and post-training yields CAVEAT-27B, a more robust open model.",
+    "paper": "https://arxiv.org/abs/2609.27273",
+    "cite": `@article{li2026caveat,
+  title={CAVEAT: Towards Robust Computer-Use Agents in Incentive-Misaligned Environments},
+  author={Li, Yuxuan and Epperson, Will and Deng, Wesley and Huang, Zezhou},
+  journal={arXiv preprint arXiv:2609.27273},
+  year={2026}
+}`
+  },
 
   {
     "title": "What Makes LLM Agent Simulations Useful for Policy Practice? An Iterative Design Study in Emergency Preparedness",
