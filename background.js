@@ -7,7 +7,7 @@ const background = [
     period: "May – Aug 2026",
     orgs: [
       { name: "Microsoft Research AI Frontiers", logo: "materials/msr_logo.svg" },
-      { name: "Microsoft AI", logo: "materials/mai_wordmark.png", wordmark: true }
+      { name: "Microsoft AI Superintelligence Team", logo: "materials/mai_wordmark.png", wordmark: true }
     ],
     role: "Research Intern",
     people: "Mentors: Zachary Huang & Will Epperson"
