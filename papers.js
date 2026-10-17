@@ -124,7 +124,7 @@ const papers = [
     "visibility": "both",
     "image": "images/ICLR2027.png",
     "excerpt": "Computer-use agents are easily steered against their users in incentive-misaligned environments, but both harness design and post-training can make them more robust. In 9 high-fidelity marketplace environments that nudge agents toward favored products, agents buy the user-optimal product only 17.3% of the time, down from 78.6% without steering. Our CAVEAT-Harness raises this by up to 80 percentage points, and post-training yields CAVEAT-27B, a more robust open model.",
-    "paper": "https://arxiv.org/abs/2609.27273",
+    "paper": "https://www.microsoft.com/en-us/research/publication/caveat-towards-robust-computer-use-agents-in-incentive-misaligned-environments/",
     "cite": `@article{li2026caveat,
   title={CAVEAT: Towards Robust Computer-Use Agents in Incentive-Misaligned Environments},
   author={Li, Yuxuan and Epperson, Will and Deng, Wesley and Huang, Zezhou},
