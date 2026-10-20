@@ -166,6 +166,22 @@ const papers = [
 }`
   },
   {
+    "title": "Model Capacity Frontier: A Development Framework for LLM-Supported Social Simulation",
+    "authors": "Patrick Zhao*, <span class=\"author-highlight\">Yuxuan Li*</span>, Hirokazu Shirado",
+    "venue": "Preprint",
+    "venue_short": "Preprint",
+    "visibility": "both",
+    "image": "images/ModelCapacityFrotnier.png",
+    "excerpt": "Judging an LLM agent simulation by one hand-picked configuration can be misleading. We introduce the Model Capacity Frontier, which maps the best empirical fit an architecture can reach across all its configurations. In a 12,000-agent crowd simulation of university commencement, it reveals that LLM decision-making improves crowd flow direction but hurts timing and spatial accuracy, and that letting agents gather at points of interest recovers both while keeping most of the gain.",
+    "paper": "https://arxiv.org/abs/2610.24168",
+    "cite": `@article{zhao2026model,
+  title={Model Capacity Frontier: A Development Framework for LLM-Supported Social Simulation},
+  author={Zhao, Patrick and Li, Yuxuan and Shirado, Hirokazu},
+  journal={arXiv preprint arXiv:2610.24168},
+  year={2026}
+}`
+  },
+  {
     "title": "A Human-Computer Collaborative Tool for Training a Single Large Language Model Agent into a Network through Few Examples",
     "authors": "Lihang Pan*, <span class=\"author-highlight\">Yuxuan Li*</span>, Chun Yu, Yuanchun Shi",
     "venue": "arXiv 2024",
