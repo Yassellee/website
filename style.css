@@ -480,9 +480,18 @@ button {
   color: var(--warm);
 }
 
-.paper-honour::before {
+/* Honours stay together on one line; if the row is too narrow they move below the venue as a group. */
+.paper-honours {
+  display: inline-flex;
+  gap: 0 8px;
+  white-space: nowrap;
+}
+
+/* Separator trails each item, so a wrapped line never starts with a dot. */
+.paper-meta > span:not(:last-child)::after,
+.paper-honour:not(:last-child)::after {
   content: "·";
-  margin-right: 8px;
+  margin-left: 8px;
   color: var(--faint);
   font-weight: 400;
 }

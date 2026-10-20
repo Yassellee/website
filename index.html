@@ -270,7 +270,7 @@
             <div class="paper-content">
               <div class="paper-meta">
                 ${post.venue_short ? `<span class="paper-venue">${post.venue_short}</span>` : ''}
-                ${post.highlight ? post.highlight.split('｜').map(h => `<span class="paper-honour">${h.trim()}</span>`).join('') : ''}
+                ${post.highlight ? `<span class="paper-honours">${post.highlight.split('｜').map(h => `<span class="paper-honour">${h.trim()}</span>`).join('')}</span>` : ''}
               </div>
               <h3>${post.title}</h3>
               <p class="paper-authors">${authorsHtml}</p>

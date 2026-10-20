@@ -38,7 +38,7 @@ const papers = [
     "venue": "EMNLP 2025 Main | The 2025 Conference on Empirical Methods in Natural Language Processing",
     "venue_short": "EMNLP 2025 Main",
     "visibility": "both",
-    "highlight": "Oral Presentation \uff5c Extensive Media Coverage",
+    "highlight": "Oral (top 3.98%) \uff5c Extensive Media Coverage",
     "image": "images/2025-02-24-EMNLP2025.png",
     "excerpt": "Reasoning models are greedier. We find that reasoning models consistently exhibit lower cooperation and reduced norm-enforced punishment, mirroring human tendencies of \"spontaneous giving and calculated greed\".",
     "paper": "https://aclanthology.org/2025.emnlp-main.267/",
