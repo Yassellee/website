@@ -172,7 +172,7 @@ const papers = [
     "venue_short": "Preprint",
     "visibility": "both",
     "image": "images/ModelCapacityFrotnier.png",
-    "excerpt": "Judging an LLM agent simulation by one hand-picked configuration can be misleading. We introduce the Model Capacity Frontier, which maps the best empirical fit an architecture can reach across all its configurations. In a 12,000-agent crowd simulation of university commencement, it reveals that LLM decision-making improves crowd flow direction but hurts timing and spatial accuracy, and that letting agents gather at points of interest recovers both while keeping most of the gain.",
+    "excerpt": "Is an LLM agent simulation actually better, or just luckily configured? Using video of two real university commencements with 12,000 attendees, we map the best real-world fit each simulation design can reach across all its configurations. This Model Capacity Frontier shows what adding LLM agents really gains and loses, and where to improve next.",
     "paper": "https://arxiv.org/abs/2610.24168",
     "cite": `@article{zhao2026model,
   title={Model Capacity Frontier: A Development Framework for LLM-Supported Social Simulation},
