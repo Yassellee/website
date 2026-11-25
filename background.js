@@ -1,16 +1,16 @@
 // Education and industry experience, newest first.
-// kind: "education" | "industry" | "research"; current: true marks an ongoing position.
+// kind: "education" | "industry" | "research"; current: true marks an ongoing position;
+// upcoming: true marks a future one. Omit logo to show an empty node.
 // An entry has either org + logo, or orgs: [{ name, logo, wordmark? }] for joint affiliations.
 const background = [
   {
     kind: "industry",
-    period: "May – Aug 2026",
-    orgs: [
-      { name: "Microsoft Research AI Frontiers", logo: "materials/msr_logo.svg" },
-      { name: "Microsoft AI", logo: "materials/mai_wordmark.png", wordmark: true }
-    ],
-    role: "Research Intern",
-    people: "Mentors: Zachary Huang & Will Epperson"
+    period: "Summer 2027",
+    upcoming: true,
+    org: "Google DeepMind",
+    role: "Student Researcher",
+    people: "Mentor: Jocelyn Shen",
+    logo: "materials/gdm_logo.png"
   },
   {
     kind: "education",
@@ -20,6 +20,16 @@ const background = [
     role: "Ph.D. in Human-Computer Interaction, School of Computer Science",
     people: "Advisors: Hirokazu Shirado & Sauvik Das",
     logo: "materials/cmu_logo.svg"
+  },
+  {
+    kind: "industry",
+    period: "May – Aug 2026",
+    orgs: [
+      { name: "Microsoft Research AI Frontiers", logo: "materials/msr_logo.svg" },
+      { name: "Microsoft AI", logo: "materials/mai_wordmark.png", wordmark: true }
+    ],
+    role: "Research Intern",
+    people: "Mentors: Zachary Huang & Will Epperson"
   },
   {
     kind: "research",

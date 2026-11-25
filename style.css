@@ -288,6 +288,42 @@ button {
 }
 
 /* ============================================
+   Announcement
+   The one tinted surface on the page, reserved for news. Flat, no border
+   or shadow, with the same corner radius as the profile photo.
+   ============================================ */
+
+.profile-text .announcement {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  background: rgba(66, 134, 245, 0.08);
+  border-radius: 10px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.profile-text .announcement span {
+  text-wrap: balance;
+}
+
+.announcement-logo {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+}
+
+.announcement a {
+  font-weight: 600;
+}
+
+.announcement strong {
+  font-weight: 600;
+}
+
+/* ============================================
    Coverage index (bio + paper press panels)
    Label column on the left, entries on the right.
    ============================================ */
@@ -460,13 +496,14 @@ button {
   min-width: 0;
 }
 
-/* Venue and honours as a typographic meta line, not pills. */
+/* Venue as plain text, honours as softly tinted chips. The red tint is
+   the counterpart of the blue tint on the news callout. */
 .paper-meta {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  gap: 2px 8px;
-  margin-bottom: 6px;
+  align-items: center;
+  gap: 6px 8px;
+  margin-bottom: 8px;
   font-size: 13px;
   font-weight: 600;
   line-height: 1.5;
@@ -476,24 +513,18 @@ button {
   color: var(--accent);
 }
 
-.paper-honour {
-  color: var(--warm);
-}
-
-/* Honours stay together on one line; if the row is too narrow they move below the venue as a group. */
 .paper-honours {
   display: inline-flex;
-  gap: 0 8px;
-  white-space: nowrap;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
-/* Separator trails each item, so a wrapped line never starts with a dot. */
-.paper-meta > span:not(:last-child)::after,
-.paper-honour:not(:last-child)::after {
-  content: "·";
-  margin-left: 8px;
-  color: var(--faint);
-  font-weight: 400;
+.paper-honour {
+  padding: 1px 8px;
+  border-radius: 6px;
+  background: rgba(179, 38, 30, 0.08);
+  color: #b3261e;
+  white-space: nowrap;
 }
 
 .paper-content h3 {
@@ -763,6 +794,30 @@ button {
 .track-item.is-current .track-node {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.12);
+}
+
+/* Upcoming positions: a dashed node and a dashed rail into the present. */
+.track-item.is-upcoming .track-node {
+  border-style: dashed;
+  border-color: var(--accent);
+}
+
+.track-item.is-upcoming .track-rail::before {
+  width: 0;
+  background: none;
+  border-left: 1px dashed var(--faint);
+}
+
+.track-item.is-upcoming .track-dates {
+  color: var(--accent);
+}
+
+.track-node.is-empty::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
 }
 
 .track-node img {

@@ -146,6 +146,11 @@
             </ul>
           </div>
         </div>
+
+        <p class="announcement">
+          <img class="announcement-logo" src="materials/gdm_logo.png" alt="" />
+          <span>I am joining <a href="https://deepmind.google/" target="_blank" rel="noopener">Google DeepMind</a> as&nbsp;a&nbsp;<strong>Student Researcher</strong> in summer&nbsp;2027!</span>
+        </p>
       </div>
       <div class="profile-photo">
         <img src="images/avatar.jpg" alt="Yuxuan Li profile photo">
@@ -488,10 +493,12 @@
       const container = document.getElementById('backgroundContainer');
       const items = background.map(item => {
         const orgs = item.orgs || [{ name: item.org, logo: item.logo }];
-        const nodes = orgs.map(o => `<span class="track-node"><img src="${o.logo}" alt="${o.name}"${o.wordmark ? ' class="is-wordmark"' : ''} /></span>`).join('');
+        const nodes = orgs.map(o => o.logo
+          ? `<span class="track-node"><img src="${o.logo}" alt="${o.name}"${o.wordmark ? ' class="is-wordmark"' : ''} /></span>`
+          : `<span class="track-node is-empty" aria-hidden="true"></span>`).join('');
         const orgHtml = orgs.map(o => `<span class="track-org-name">${o.name}</span>`).join('<span class="track-org-and">and</span>');
         return `
-        <li class="track-item${item.current ? ' is-current' : ''}${orgs.length > 1 ? ' is-joint' : ''}">
+        <li class="track-item${item.current ? ' is-current' : ''}${item.upcoming ? ' is-upcoming' : ''}${orgs.length > 1 ? ' is-joint' : ''}">
           <div class="track-period">
             <span class="track-dates">${item.period}</span>
             <span class="track-kind">${{ education: 'Education', industry: 'Industry Research', research: 'Academic Research' }[item.kind] || ''}</span>
