@@ -9,6 +9,8 @@ const papers = [
     "image": "images/2025-09-25-ICLR2026-submission-a.png",
     "excerpt": "Multi-agent is everywhere today. But the core promise that many agents pool more information than one quietly breaks. Across 15 frontier LLMs, groups score 30% where a single agent with the same total info scores 81%. Scaling the group makes it worse.",
     "paper": "https://icml.cc/virtual/2026/poster/62206",
+    "code": "https://github.com/Yassellee/HiddenBench_ICML",
+    "code_label": "HiddenBench",
     "cite": `@inproceedings{li2026systematic,
   title={Systematic Failures in Collective Reasoning under Distributed Information in Multi-Agent LLMs},
   author={Li, Yuxuan and Naito, Aoi and Shirado, Hirokazu},

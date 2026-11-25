@@ -221,7 +221,7 @@
         const links = [];
         if (post.paper) links.push(`<a href="${post.paper}" target="_blank">Paper</a>`);
         if (post.video) links.push(`<a href="${post.video}" target="_blank">Video</a>`);
-        if (post.code) links.push(`<a href="${post.code}" target="_blank">Code</a>`);
+        if (post.code) links.push(`<a href="${post.code}" target="_blank">${post.code_label || 'Code'}</a>`);
         if (post.poster) links.push(`<a href="${post.poster}" target="_blank">Poster</a>`);
         if (post.slides) links.push(`<a href="${post.slides}" target="_blank">Slides</a>`);
         if (post.website) links.push(`<a href="${post.website}" target="_blank">Website</a>`);
