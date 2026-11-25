@@ -309,12 +309,6 @@ button {
   text-wrap: balance;
 }
 
-.announcement-logo {
-  flex-shrink: 0;
-  width: 22px;
-  height: 22px;
-}
-
 .announcement a {
   font-weight: 600;
 }
