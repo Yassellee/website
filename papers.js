@@ -22,6 +22,7 @@ const papers = [
     "venue": "ICML 2026",
     "venue_short": "ICML 2026",
     "visibility": "both",
+    "highlight": "Used by Anthropic, Nvidia, Microsoft",
     "image": "images/2025-09-25-ICLR2026-submission-a.png",
     "excerpt": "Multi-agent is everywhere today. But the core promise that many agents pool more information than one quietly breaks. Across 15 frontier LLMs, groups score 30% where a single agent with the same total info scores 81%. Scaling the group makes it worse.",
     "paper": "https://icml.cc/virtual/2026/poster/62206",
